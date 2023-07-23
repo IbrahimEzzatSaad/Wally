@@ -1,10 +1,8 @@
 package com.example.wally.ui.navigation
 
 import android.os.Bundle
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
@@ -25,14 +23,16 @@ fun AppNavHost(
         composable(route = HomeScreen.route) {
             HomeScreen(
                 modifier = modifier,
-                onArticleItemClicked = {
+                onPictureItemClicked = {
                     /*navController.navigateToSingleArticle(it)*/
                 }
             )
         }
 
         composable(route = SplashScreen.route) {
-            SplashScreen(modifier = modifier)
+            SplashScreen(modifier = modifier, onTimeEnd = {
+                navController.navigate(route = HomeScreen.route)
+            })
         }
 
         /*composable(
@@ -61,7 +61,7 @@ private fun NavHostController.navigateToSingleArticle(picture: PicturesItem) {
     })
 }*/
 
-fun NavHostController.navigatee(
+/*fun NavHostController.navigatee(
     route: String,
     args: Bundle,
     navOptions: NavOptions? = null,
@@ -81,6 +81,6 @@ fun NavHostController.navigatee(
     } else {
         navigate(route, navOptions, navigatorExtras)
     }
-}
+}*/
 
 val appScreens = listOf(HomeScreen, PictureDetails)
