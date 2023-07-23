@@ -13,11 +13,11 @@ abstract class PicturesDao {
 
     @Transaction
     @Query("SELECT * FROM pictures ORDER BY likes DESC")
-    abstract fun getAllArticles(): Flow<List<CachedPicture>>
+    abstract fun getAllPictures(): Flow<List<CachedPicture>>
 
     @Transaction
     @Query("SELECT * FROM pictures where code = :code")
-    abstract fun getArticleById(code: String): Flow<CachedPicture>
+    abstract fun getPictureById(code: String): Flow<CachedPicture>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertPictures(vararg pictures: CachedPicture)

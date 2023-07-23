@@ -9,10 +9,10 @@ class FetchPics @Inject constructor(private val picturesRepository: PicturesRepo
 
     suspend operator fun invoke(page: String) {
         return withContext(Dispatchers.IO) {
-            val articles = picturesRepository.requestPictures(page)
-            if (articles.isEmpty())
-                throw NoMoreArticlesException("No more articles")
-            picturesRepository.storePictures(articles)
+            val pictures = picturesRepository.requestPictures(page)
+            if (pictures.isEmpty())
+                throw NoMorePicturesException("No more pictures")
+            picturesRepository.storePictures(pictures)
         }
     }
 }

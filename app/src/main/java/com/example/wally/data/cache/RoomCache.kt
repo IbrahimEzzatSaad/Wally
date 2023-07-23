@@ -9,9 +9,9 @@ class RoomCache @Inject constructor(
     private val picturesDao: PicturesDao,
 ) : Cache {
 
-    override fun getPictures(): Flow<List<CachedPicture>> = picturesDao.getAllArticles()
+    override fun getPictures(): Flow<List<CachedPicture>> = picturesDao.getAllPictures()
 
-    override fun getPicture(code: String): Flow<CachedPicture> = picturesDao.getArticleById(code)
+    override fun getPicture(code: String): Flow<CachedPicture> = picturesDao.getPictureById(code)
 
     override suspend fun storePictures(vararg pictures: CachedPicture) =
         picturesDao.insertPictures(*pictures)

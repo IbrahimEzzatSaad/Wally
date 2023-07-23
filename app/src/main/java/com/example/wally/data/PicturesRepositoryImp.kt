@@ -41,8 +41,8 @@ class PicturesRepositoryImp @Inject constructor(
     override fun getPictures(): Flow<List<PicturesItem>> {
         return cache.getPictures()
             .distinctUntilChanged() // ensures only events with new information get to the subscriber.
-            .map { articlesList ->
-                articlesList.map { it.toDomain() }
+            .map { picturesList ->
+                picturesList.map { it.toDomain() }
             }
     }
 }

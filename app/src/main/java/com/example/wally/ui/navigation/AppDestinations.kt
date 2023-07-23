@@ -18,6 +18,6 @@ object SplashScreen : AppDestinations {
 object PictureDetails : AppDestinations {
     override val title = "Details"
     override val route = "picture"
-    const val articleKey = "picture_argument"
+    const val pictureKey = "picture_argument"
 }
 

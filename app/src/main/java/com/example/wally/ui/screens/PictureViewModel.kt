@@ -46,7 +46,7 @@ class PictureViewModel  @Inject constructor(
     }
     
     private suspend fun onNewPicturesList(pictures: List<PicturesItem>) {
-        Logger.d("Got more Articles $pictures")
+        Logger.d("Got more Pictures $pictures")
         _pictures.emit(pictures)
     }
 

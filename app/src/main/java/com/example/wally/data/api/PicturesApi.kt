@@ -2,8 +2,6 @@ package com.example.wally.data.api
 
 import com.example.wally.data.api.model.ApiPictures
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PicturesApi {

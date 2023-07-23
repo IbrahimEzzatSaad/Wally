@@ -24,7 +24,7 @@ fun AppNavHost(
             HomeScreen(
                 modifier = modifier,
                 onPictureItemClicked = {
-                    /*navController.navigateToSingleArticle(it)*/
+                    /*navController.navigateToSinglePicture(it)*/
                 }
             )
         }
@@ -36,18 +36,18 @@ fun AppNavHost(
         }
 
         /*composable(
-            route = ArticleDetails.route
+            route = PictureDetails.route
         ) { navBackStackEntry ->
-            val article =
+            val picture =
                 if (Build.VERSION.SDK_INT >= 33) {
-                    navBackStackEntry.arguments?.getSerializable(articleKey, PictureInfo::class.java)
+                    navBackStackEntry.arguments?.getSerializable(pictureKey, PictureInfo::class.java)
                 } else {
-                    navBackStackEntry.arguments?.getSerializable(articleKey) as PictureInfo?
+                    navBackStackEntry.arguments?.getSerializable(pictureKey) as PictureInfo?
                 }
-            article?.let {
+            picture?.let {
                 val viewModel = hiltViewModel<PictureViewModel>()
-                viewModel.getArticleById(it.id)
-                ArticleDetailsScreen(modifier= modifier.padding(16.dp),viewModel = viewModel)
+                viewModel.getPictureById(it.id)
+                PictureDetailsScreen(modifier= modifier.padding(16.dp),viewModel = viewModel)
             }
         }
         */
@@ -55,9 +55,9 @@ fun AppNavHost(
 }
 
 /*
-private fun NavHostController.navigateToSingleArticle(picture: PicturesItem) {
+private fun NavHostController.navigateToSinglePicture(picture: PicturesItem) {
     this.navigatee(route = PictureDetails.route, Bundle().apply {
-        this.putSerializable(articleKey, articleUI)
+        this.putSerializable(pictureKey, pictureUI)
     })
 }*/
 

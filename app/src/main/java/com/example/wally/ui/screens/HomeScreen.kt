@@ -40,9 +40,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -51,12 +49,12 @@ import androidx.compose.ui.layout.ContentScale
 
 
 typealias OnPictureItemClicked = (PicturesItem) -> Unit
-const val ARTICLE_LIST_TEST_TAG = "articles_list"
+const val PICTURE_LIST_TEST_TAG = "pictures_list"
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(onArticleItemClicked: OnPictureItemClicked,
+fun HomeScreen(onPictureItemClicked: OnPictureItemClicked,
                modifier: Modifier = Modifier,
                viewModel: PictureViewModel = hiltViewModel()) {
 
@@ -78,8 +76,8 @@ fun HomeScreen(onArticleItemClicked: OnPictureItemClicked,
 
                     PicturesList(
                         it,
-                        modifier = modifier.testTag(ARTICLE_LIST_TEST_TAG),
-                        onArticleItemClicked = onArticleItemClicked,
+                        modifier = modifier.testTag(PICTURE_LIST_TEST_TAG),
+                        onPictureItemClicked = onPictureItemClicked,
                         listState = listState
                     )
                 } ?: run {
@@ -103,7 +101,7 @@ fun HomeScreen(onArticleItemClicked: OnPictureItemClicked,
 @Composable
 fun PicturesList(
     picturesList: List<PicturesItem>,
-    onArticleItemClicked: OnPictureItemClicked,
+    onPictureItemClicked: OnPictureItemClicked,
     modifier: Modifier = Modifier,
     listState: LazyStaggeredGridState = rememberLazyStaggeredGridState()
 ) {
@@ -120,7 +118,7 @@ fun PicturesList(
                    modifier = Modifier
                        .fillMaxSize(),
                    item = picture,
-                   onItemClicked = onArticleItemClicked
+                   onItemClicked = onPictureItemClicked
                )
            }
     }

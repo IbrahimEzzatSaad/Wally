@@ -15,6 +15,6 @@ abstract class DataModule {
 
     @Binds
     @ActivityRetainedScoped
-    abstract fun bindArticlesRepository(repository: PicturesRepositoryImp): PicturesRepository
+    abstract fun bindPicturesRepository(repository: PicturesRepositoryImp): PicturesRepository
 
 }
