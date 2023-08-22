@@ -4,9 +4,8 @@ package com.example.wally.data.api.model
 import com.google.gson.annotations.SerializedName
 
 data class PicturesItem(
-    val idd: Int,
     @SerializedName("id")
-    val code: String,
+    val id: String,
     @SerializedName("description")
     val description: String?,
     @SerializedName("alt_description")
@@ -20,6 +19,7 @@ data class PicturesItem(
     @SerializedName("height")
     val height: Int,
     @SerializedName("width")
-    val width: Int
+    val width: Int,
+    var featured: Boolean = false
 )
 

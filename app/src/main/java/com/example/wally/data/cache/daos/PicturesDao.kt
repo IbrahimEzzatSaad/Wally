@@ -12,16 +12,24 @@ import kotlinx.coroutines.flow.Flow
 abstract class PicturesDao {
 
     @Transaction
-    @Query("SELECT * FROM pictures ORDER BY likes DESC")
-    abstract fun getAllPictures(): Flow<List<CachedPicture>>
+    @Query("SELECT * FROM pictures WHERE featured = 0 ORDER BY likes DESC")
+    abstract fun getPictures(): Flow<List<CachedPicture>>
 
     @Transaction
-    @Query("SELECT * FROM pictures where code = :code")
-    abstract fun getPictureById(code: String): Flow<CachedPicture>
+    @Query("SELECT * FROM pictures WHERE featured = 1 ORDER BY likes DESC")
+    abstract fun getFeatured(): Flow<List<CachedPicture>>
+
+    @Transaction
+    @Query("SELECT * FROM pictures WHERE id = :id")
+    abstract fun getPictureById(id: String): Flow<CachedPicture>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertPictures(vararg pictures: CachedPicture)
 
-    @Query("DELETE FROM pictures")
-    abstract fun deleteAll()
+
+    @Query("DELETE FROM pictures WHERE featured = 0")
+    abstract fun deletePictures()
+
+    @Query("DELETE FROM pictures WHERE featured = 1")
+    abstract fun deleteFeatured()
 }

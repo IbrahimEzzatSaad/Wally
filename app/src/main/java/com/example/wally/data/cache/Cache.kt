@@ -7,11 +7,15 @@ interface Cache {
 
     fun getPictures(): Flow<List<CachedPicture>>
 
+    fun getFeatured(): Flow<List<CachedPicture>>
+
     fun getPicture(id: String): Flow<CachedPicture>
 
     suspend fun storePictures(vararg pictures: CachedPicture)
 
-    fun deleteAll()
+    fun deletePictures()
+
+    fun deleteFeatured()
 
 
 }

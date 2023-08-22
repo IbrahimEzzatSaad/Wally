@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 
 @ProvidedTypeConverter
 class Converter {
-    val gson = Gson()
+    private val gson = Gson()
 
     @TypeConverter
     fun fromUrls(url: Urls) : String? {

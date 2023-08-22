@@ -30,8 +30,28 @@ class PicturesRepositoryImp @Inject constructor(
         }
     }
 
+    override suspend fun requestFeatured(): List<PicturesItem> {
+
+        try {
+            val results: ApiPictures = api.getFeatured()
+            return results.toList()
+        } catch (exception: HttpException) {
+            throw NetworkException(exception.message ?: "Code ${exception.code()}")
+        }
+    }
+
+    override suspend fun storeFeatured(pictures: List<PicturesItem>) {
+        cache.deleteFeatured()
+
+        pictures.onEach { it.featured = true }
+        pictures.forEach { picture ->
+            Log.i("Featured_Item:", picture.toString())
+            cache.storePictures(CachedPicture.fromDomain(picture))
+        }
+    }
+
     override suspend fun storePictures(pictures: List<PicturesItem>) {
-        cache.deleteAll()
+        cache.deletePictures()
         pictures.forEach { picture ->
             Log.i("ListInformation:", picture.toString())
             cache.storePictures(CachedPicture.fromDomain(picture))
@@ -40,6 +60,15 @@ class PicturesRepositoryImp @Inject constructor(
 
     override fun getPictures(): Flow<List<PicturesItem>> {
         return cache.getPictures()
+            .distinctUntilChanged() // ensures only events with new information get to the subscriber.
+            .map { picturesList ->
+                picturesList.map { it.toDomain() }
+            }
+    }
+
+    override fun getFeatured(): Flow<List<PicturesItem>> {
+
+        return cache.getFeatured()
             .distinctUntilChanged() // ensures only events with new information get to the subscriber.
             .map { picturesList ->
                 picturesList.map { it.toDomain() }

@@ -3,35 +3,36 @@ package com.example.wally.data.cache.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.example.wally.data.api.model.PicturesItem
 import com.example.wally.data.api.model.Urls
 
 @Entity(tableName = "pictures")
 data class CachedPicture (
     @PrimaryKey(autoGenerate = true)
-    var pictureId: Int = 0,
-    @ColumnInfo(name = "code") var code: String = "",
+    val pictureId: Int = 0,
+    @ColumnInfo(name = "id") var id: String = "",
     @ColumnInfo(name = "description") var description: String? = "",
     @ColumnInfo(name = "alt_description") var altDescription: String? = "",
     @ColumnInfo(name = "color") var color: String = "",
     @ColumnInfo(name = "likes") var likes: Int = 0,
     @ColumnInfo(name = "links") var links: Urls = Urls("","","","","",""),
     @ColumnInfo(name = "height") var height: Int = 0,
-    @ColumnInfo(name = "width") var width: Int = 0
+    @ColumnInfo(name = "width") var width: Int = 0,
+    @ColumnInfo(name = "featured") var featured: Boolean = false
+
 ){
     companion object {
         fun fromDomain(picture: PicturesItem): CachedPicture {
             return CachedPicture(
-                picture.idd,
-                picture.code,
-                picture.description ,
-                picture.altDescription,
-                picture.color,
-                picture.likes,
-                picture.urls,
-                picture.height,
-                picture.width
+                id = picture.id,
+                description = picture.description ,
+                altDescription = picture.altDescription,
+                color = picture.color,
+                likes = picture.likes,
+                links = picture.urls,
+                height = picture.height,
+                width = picture.width,
+                featured = picture.featured
             )
         }
 
@@ -41,14 +42,14 @@ data class CachedPicture (
 fun CachedPicture.toDomain(): PicturesItem {
 
     return PicturesItem(
-        pictureId,
-        code,
+        id,
         description,
         altDescription,
         color,
         likes,
         links,
         height,
-        width
+        width,
+        featured
     )
 }
