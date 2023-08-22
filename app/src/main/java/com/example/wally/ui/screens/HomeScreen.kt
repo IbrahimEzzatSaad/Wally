@@ -1,6 +1,7 @@
 package com.example.wally.ui.screens
 
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -46,7 +47,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-
+import com.example.wally.ui.component.Featured
 
 typealias OnPictureItemClicked = (PicturesItem) -> Unit
 const val PICTURE_LIST_TEST_TAG = "pictures_list"
@@ -65,31 +66,36 @@ fun HomeScreen(onPictureItemClicked: OnPictureItemClicked,
     ) {
         val listState = rememberLazyStaggeredGridState()
         val pictures by viewModel.pictures.collectAsState()
+        val featured by viewModel.featured.collectAsState()
 
-        Column {
-            Text(text = "All", modifier = Modifier.padding(5.dp))
+        pictures?.let {
+            Column(modifier = Modifier.fillMaxSize()) {
 
-            Spacer(modifier = Modifier.size(5.dp))
+               /* stickyHeader {
+                    featured?.let { Featured(it) }
+                }*/
 
-            Box(modifier = Modifier) {
-                pictures?.let {
+                Text(text = "All", modifier = Modifier.padding(5.dp))
+                Spacer(modifier = Modifier.size(5.dp))
 
-                    PicturesList(
-                        it,
-                        modifier = modifier.testTag(PICTURE_LIST_TEST_TAG),
-                        onPictureItemClicked = onPictureItemClicked,
-                        listState = listState
-                    )
-                } ?: run {
-                    Box(
-                        modifier = Modifier
-                            .width(48.dp)
-                            .align(Alignment.Center)
-                            .height(48.dp)
-                    ) {
-                        CircularProgressIndicator(modifier = Modifier.testTag("myProgressIndicator"))
-                    }
-                }
+                PicturesList(
+                    it,
+                    modifier = modifier.testTag(PICTURE_LIST_TEST_TAG),
+                    onPictureItemClicked = onPictureItemClicked,
+                    listState = listState,
+                    featured = featured
+                )
+
+            }
+
+        } ?: run{
+            Box(
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(modifier = Modifier.testTag("myProgressIndicator"))
             }
         }
     }
@@ -103,8 +109,10 @@ fun PicturesList(
     picturesList: List<PicturesItem>,
     onPictureItemClicked: OnPictureItemClicked,
     modifier: Modifier = Modifier,
-    listState: LazyStaggeredGridState = rememberLazyStaggeredGridState()
+    listState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
+    featured : List<PicturesItem>?
 ) {
+
     LazyVerticalStaggeredGrid(
         state = listState,
         columns = if (LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE) {
@@ -112,15 +120,20 @@ fun PicturesList(
         } else StaggeredGridCells.Fixed(2),
         modifier = modifier) {
 
-           items(picturesList) { picture ->
 
-               PictureItem(
-                   modifier = Modifier
-                       .fillMaxSize(),
-                   item = picture,
-                   onItemClicked = onPictureItemClicked
-               )
-           }
+        item {
+            featured?.let { Featured(it) }
+        }
+
+        items(picturesList) { picture ->
+
+            PictureItem(
+                modifier = Modifier
+                    .fillMaxSize(),
+                item = picture,
+                onItemClicked = onPictureItemClicked
+            )
+        }
     }
 }
 
