@@ -41,27 +41,35 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import com.example.wally.ui.component.Featured
 
 typealias OnPictureItemClicked = (PicturesItem) -> Unit
+
 const val PICTURE_LIST_TEST_TAG = "pictures_list"
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(onPictureItemClicked: OnPictureItemClicked,
-               modifier: Modifier = Modifier,
-               viewModel: PictureViewModel = hiltViewModel()) {
+fun HomeScreen(
+    onPictureItemClicked: OnPictureItemClicked,
+    modifier: Modifier = Modifier,
+    viewModel: PictureViewModel = hiltViewModel()
+) {
 
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(10.dp),
         color = MaterialTheme.colorScheme.background
     ) {
         val listState = rememberLazyStaggeredGridState()
@@ -69,26 +77,45 @@ fun HomeScreen(onPictureItemClicked: OnPictureItemClicked,
         val featured by viewModel.featured.collectAsState()
 
         pictures?.let {
-            Column(modifier = Modifier.fillMaxSize()) {
+            LazyVerticalStaggeredGrid(
+                state = listState,
+                columns = if (LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE) {
+                    StaggeredGridCells.Adaptive(minSize = 175.dp)
+                } else StaggeredGridCells.Fixed(2)
+            ) {
 
-               /* stickyHeader {
+                item(span = StaggeredGridItemSpan.FullLine, content = {
                     featured?.let { Featured(it) }
-                }*/
+                })
 
-                Text(text = "All", modifier = Modifier.padding(5.dp))
-                Spacer(modifier = Modifier.size(5.dp))
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Spacer(modifier = Modifier.size(15.dp))
+                }
 
-                PicturesList(
-                    it,
-                    modifier = modifier.testTag(PICTURE_LIST_TEST_TAG),
-                    onPictureItemClicked = onPictureItemClicked,
-                    listState = listState,
-                    featured = featured
-                )
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Text(text = "All",
+                        style = MaterialTheme.typography.titleMedium ,
+                        modifier = Modifier.padding(5.dp),
+                        color = Color.White.copy(alpha = 0.9f))
+                }
 
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Spacer(modifier = Modifier.size(5.dp))
+                }
+
+                items(pictures!!) { picture ->
+
+                    PictureItem(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        item = picture,
+                        onItemClicked = onPictureItemClicked
+                    )
+                }
             }
 
-        } ?: run{
+
+        } ?: run {
             Box(
                 modifier = Modifier
                     .width(48.dp)
@@ -99,43 +126,9 @@ fun HomeScreen(onPictureItemClicked: OnPictureItemClicked,
             }
         }
     }
+
 }
 
-
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun PicturesList(
-    picturesList: List<PicturesItem>,
-    onPictureItemClicked: OnPictureItemClicked,
-    modifier: Modifier = Modifier,
-    listState: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
-    featured : List<PicturesItem>?
-) {
-
-    LazyVerticalStaggeredGrid(
-        state = listState,
-        columns = if (LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE) {
-            StaggeredGridCells.Adaptive(minSize = 175.dp)
-        } else StaggeredGridCells.Fixed(2),
-        modifier = modifier) {
-
-
-        item {
-            featured?.let { Featured(it) }
-        }
-
-        items(picturesList) { picture ->
-
-            PictureItem(
-                modifier = Modifier
-                    .fillMaxSize(),
-                item = picture,
-                onItemClicked = onPictureItemClicked
-            )
-        }
-    }
-}
 
 @Composable
 private fun PictureItem(
@@ -148,11 +141,12 @@ private fun PictureItem(
             .clickable { onItemClicked(item) }
             .padding(5.dp)
     ) {
-        val painter = rememberAsyncImagePainter(item.urls.regular )
+        val painter = rememberAsyncImagePainter(item.urls.regular)
         val state = painter.state
 
         val transition by animateFloatAsState(
-            targetValue = if (state is AsyncImagePainter.State.Success) 1f else 0f, label = "")
+            targetValue = if (state is AsyncImagePainter.State.Success) 1f else 0f, label = ""
+        )
 
 
 
@@ -165,7 +159,7 @@ private fun PictureItem(
             contentDescription = "custom transition based on painter state",
 
 
-        )
+            )
 
 
     }
