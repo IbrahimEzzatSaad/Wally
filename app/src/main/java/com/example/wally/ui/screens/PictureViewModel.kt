@@ -38,10 +38,10 @@ class PictureViewModel  @Inject constructor(
 
     init {
         viewModelScope.launch(mainDispatcher) {
-            fetchPics("1")
             fetchFeatured()
-            subscribeToPicturesUpdates()
+            fetchPics("1")
             subscribeToFeaturedUpdates()
+            subscribeToPicturesUpdates()
         }
     }
 
