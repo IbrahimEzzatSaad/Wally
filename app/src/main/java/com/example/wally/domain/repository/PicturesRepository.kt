@@ -1,11 +1,12 @@
 package com.example.wally.domain.repository
 
+import androidx.paging.PagingData
 import com.example.wally.data.api.model.PicturesItem
 import kotlinx.coroutines.flow.Flow
 
 interface PicturesRepository {
 
-    suspend fun requestPictures(page: String): List<PicturesItem>
+    suspend fun requestPictures(): Flow<PagingData<PicturesItem>>
 
     suspend fun requestFeatured(): List<PicturesItem>
 
@@ -13,9 +14,7 @@ interface PicturesRepository {
 
     suspend fun storeFeatured(pictures: List<PicturesItem>)
 
-    fun getPictures(): Flow<List<PicturesItem>>
-
-    fun getFeatured(): Flow<List<PicturesItem>>
+    suspend fun getFeatured(): Flow<List<PicturesItem>>
 
 
 }

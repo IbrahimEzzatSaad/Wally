@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class GetFeatured @Inject constructor(private val picturesRepository: PicturesRepository) {
 
-    operator fun invoke() = picturesRepository.getFeatured()
+    suspend operator fun invoke() = picturesRepository.getFeatured()
         .filter { it.isNotEmpty() }
 }

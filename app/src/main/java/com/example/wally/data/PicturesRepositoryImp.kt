@@ -1,6 +1,12 @@
 package com.example.wally.data
 
 import android.util.Log
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.example.wally.data.api.ApiParameters.PAGE_SIZE
 import com.example.wally.data.api.model.ApiPictures
 import com.example.wally.domain.repository.PicturesRepository
 import com.example.wally.domain.usecases.NetworkException
@@ -9,6 +15,7 @@ import com.example.wally.data.api.model.PicturesItem
 import com.example.wally.data.cache.Cache
 import com.example.wally.data.cache.model.CachedPicture
 import com.example.wally.data.cache.model.toDomain
+import com.example.wally.data.paging.PicturesRemoteMediator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -20,11 +27,31 @@ class PicturesRepositoryImp @Inject constructor(
     private val api: PicturesApi
 ) : PicturesRepository {
 
-    override suspend fun requestPictures(page: String): List<PicturesItem> {
+    /* override suspend fun requestPictures(page: String): List<PicturesItem> {
 
+         try {
+             val results: ApiPictures = api.getPictures(page)
+             return results.toList()
+         } catch (exception: HttpException) {
+             throw NetworkException(exception.message ?: "Code ${exception.code()}")
+         }
+     }*/
+
+    @OptIn(ExperimentalPagingApi::class)
+    override suspend fun requestPictures(): Flow<PagingData<PicturesItem>> {
         try {
-            val results: ApiPictures = api.getPictures(page)
-            return results.toList()
+            val pager = Pager(
+                config = PagingConfig(pageSize = PAGE_SIZE),
+                remoteMediator = PicturesRemoteMediator(
+                    cache, api
+                )
+            ) {
+                cache.getPictures()
+            }
+
+            return pager.flow.map { data ->
+                data.map { it.toDomain() }
+            }
         } catch (exception: HttpException) {
             throw NetworkException(exception.message ?: "Code ${exception.code()}")
         }
@@ -58,15 +85,15 @@ class PicturesRepositoryImp @Inject constructor(
         }
     }
 
-    override fun getPictures(): Flow<List<PicturesItem>> {
+    /*override fun getPictures(): Flow<List<PicturesItem>> {
         return cache.getPictures()
             .distinctUntilChanged() // ensures only events with new information get to the subscriber.
             .map { picturesList ->
                 picturesList.map { it.toDomain() }
             }
-    }
+    }*/
 
-    override fun getFeatured(): Flow<List<PicturesItem>> {
+    override suspend fun getFeatured(): Flow<List<PicturesItem>> {
 
         return cache.getFeatured()
             .distinctUntilChanged() // ensures only events with new information get to the subscriber.

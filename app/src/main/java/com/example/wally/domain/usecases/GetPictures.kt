@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class GetPictures @Inject constructor(private val picturesRepository: PicturesRepository) {
 
-    operator fun invoke() = picturesRepository.getPictures()
-        .filter { it.isNotEmpty() }
+    suspend operator fun invoke() = picturesRepository.requestPictures()
+
 }

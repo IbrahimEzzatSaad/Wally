@@ -1,5 +1,6 @@
 package com.example.wally.data.cache.daos
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -13,23 +14,26 @@ abstract class PicturesDao {
 
     @Transaction
     @Query("SELECT * FROM pictures WHERE featured = 0 ORDER BY likes DESC")
-    abstract fun getPictures(): Flow<List<CachedPicture>>
+    abstract fun getPictures(): PagingSource<Int, CachedPicture>
 
     @Transaction
     @Query("SELECT * FROM pictures WHERE featured = 1 ORDER BY likes DESC")
     abstract fun getFeatured(): Flow<List<CachedPicture>>
 
     @Transaction
-    @Query("SELECT * FROM pictures WHERE id = :id")
-    abstract fun getPictureById(id: String): Flow<CachedPicture>
+    @Query("SELECT * FROM pictures WHERE id = :id AND featured = 0")
+    abstract fun getPictureById(id: String): CachedPicture?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertPictures(vararg pictures: CachedPicture)
-
 
     @Query("DELETE FROM pictures WHERE featured = 0")
     abstract fun deletePictures()
 
     @Query("DELETE FROM pictures WHERE featured = 1")
     abstract fun deleteFeatured()
+
+    @Query("SELECT COUNT(*) FROM pictures WHERE featured = 0")
+    abstract fun getItemsCount() : Int
+
 }

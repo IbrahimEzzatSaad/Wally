@@ -8,8 +8,9 @@ import com.example.wally.data.api.model.Urls
 
 @Entity(tableName = "pictures")
 data class CachedPicture (
+
     @PrimaryKey(autoGenerate = true)
-    val pictureId: Int = 0,
+    @ColumnInfo(name = "pictureId") var pictureId: Int = 0,
     @ColumnInfo(name = "id") var id: String = "",
     @ColumnInfo(name = "description") var description: String? = "",
     @ColumnInfo(name = "alt_description") var altDescription: String? = "",
