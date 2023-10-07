@@ -25,6 +25,9 @@ fun AppNavHost(
                 modifier = modifier,
                 onPictureItemClicked = {
                     /*navController.navigateToSinglePicture(it)*/
+                },
+                onFeaturedItemClicked = { featured, index ->
+                    /*navController.navigateToSinglePicture(it)*/
                 }
             )
         }
