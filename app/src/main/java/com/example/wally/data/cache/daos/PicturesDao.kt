@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 abstract class PicturesDao {
 
     @Transaction
-    @Query("SELECT * FROM pictures WHERE featured = 0 ORDER BY likes DESC")
+    @Query("SELECT * FROM pictures WHERE featured = 0")
     abstract fun getPictures(): PagingSource<Int, CachedPicture>
 
     @Transaction
@@ -35,5 +35,6 @@ abstract class PicturesDao {
 
     @Query("SELECT COUNT(*) FROM pictures WHERE featured = 0")
     abstract fun getItemsCount() : Int
+
 
 }
