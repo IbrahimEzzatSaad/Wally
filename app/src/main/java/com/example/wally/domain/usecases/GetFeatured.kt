@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetFeatured @Inject constructor(private val picturesRepository: PicturesRepository) {
 
     suspend operator fun invoke() = picturesRepository.getFeatured()
-        .filter { it.isNotEmpty() }
+
 }
