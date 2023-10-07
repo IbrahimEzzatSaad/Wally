@@ -36,7 +36,7 @@ class PicturesRemoteMediator(
                 LoadType.APPEND -> {
                     withContext(Dispatchers.IO) {
                         val count = cache.getItemsCount()
-                        Log.i("Page number:", ((count / PAGE_SIZE) + 1).toString())
+                        Log.i("Page number:","$count / $PAGE_SIZE = " +  ((count / PAGE_SIZE) + 1).toString())
                         return@withContext (count / PAGE_SIZE) + 1
                     }
                 }
@@ -59,9 +59,7 @@ class PicturesRemoteMediator(
             // in the DB.
             withContext(Dispatchers.IO) {
                 response.forEach {
-                    if (cache.getPictureById(it.id) == null){
-                        cache.storePictures(CachedPicture.fromDomain(it))
-                    }
+                    cache.storePictures(CachedPicture.fromDomain(it))
                 }
             }
 
