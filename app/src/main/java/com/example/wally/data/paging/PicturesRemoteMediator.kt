@@ -1,5 +1,6 @@
 package com.example.wally.data.paging
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -35,6 +36,7 @@ class PicturesRemoteMediator(
                 LoadType.APPEND -> {
                     withContext(Dispatchers.IO) {
                         val count = cache.getItemsCount()
+                        Log.i("Page number:", ((count / PAGE_SIZE) + 1).toString())
                         return@withContext (count / PAGE_SIZE) + 1
                     }
                 }
@@ -57,7 +59,9 @@ class PicturesRemoteMediator(
             // in the DB.
             withContext(Dispatchers.IO) {
                 response.forEach {
-                    cache.storePictures(CachedPicture.fromDomain(it))
+                    if (cache.getPictureById(it.id) == null){
+                        cache.storePictures(CachedPicture.fromDomain(it))
+                    }
                 }
             }
 
