@@ -27,27 +27,19 @@ class PicturesRepositoryImp @Inject constructor(
     private val api: PicturesApi
 ) : PicturesRepository {
 
-    /* override suspend fun requestPictures(page: String): List<PicturesItem> {
-
-         try {
-             val results: ApiPictures = api.getPictures(page)
-             return results.toList()
-         } catch (exception: HttpException) {
-             throw NetworkException(exception.message ?: "Code ${exception.code()}")
-         }
-     }*/
 
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun requestPictures(): Flow<PagingData<PicturesItem>> {
         try {
             val pager = Pager(
-                config = PagingConfig(pageSize = PAGE_SIZE),
+                config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
                 remoteMediator = PicturesRemoteMediator(
                     cache, api
                 )
             ) {
                 cache.getPictures()
             }
+
 
             return pager.flow.map { data ->
                 data.map { it.toDomain() }
@@ -69,7 +61,6 @@ class PicturesRepositoryImp @Inject constructor(
 
     override suspend fun storeFeatured(pictures: List<PicturesItem>) {
         cache.deleteFeatured()
-
         pictures.onEach { it.featured = true }
         pictures.forEach { picture ->
             Log.i("Featured_Item:", picture.toString())
@@ -85,16 +76,7 @@ class PicturesRepositoryImp @Inject constructor(
         }
     }
 
-    /*override fun getPictures(): Flow<List<PicturesItem>> {
-        return cache.getPictures()
-            .distinctUntilChanged() // ensures only events with new information get to the subscriber.
-            .map { picturesList ->
-                picturesList.map { it.toDomain() }
-            }
-    }*/
-
     override suspend fun getFeatured(): Flow<List<PicturesItem>> {
-
         return cache.getFeatured()
             .distinctUntilChanged() // ensures only events with new information get to the subscriber.
             .map { picturesList ->
