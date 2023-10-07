@@ -12,11 +12,12 @@ interface Cache {
 
     suspend fun storePictures(vararg pictures: CachedPicture)
     fun getPictureById(id : String) : CachedPicture?
-    fun getItemsCount() : Int
 
     fun deletePictures()
 
     fun deleteFeatured()
+
+    fun getItemsCount() : Int
 
 
 }

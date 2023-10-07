@@ -19,11 +19,10 @@ class RoomCache @Inject constructor(
         picturesDao.insertPictures(*pictures)
 
 
-    override fun getItemsCount() : Int = picturesDao.getItemsCount()
-
     override fun deletePictures() = picturesDao.deletePictures()
 
     override fun deleteFeatured() = picturesDao.deleteFeatured()
 
+    override fun getItemsCount() : Int = picturesDao.getItemsCount()
 
 }
