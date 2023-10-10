@@ -96,4 +96,8 @@ dependencies {
 
     // Utils
     implementation "com.jakewharton.timber:timber:5.0.1"
+
+
+    implementation("com.exyte:animated-navigation-bar:1.0.0")
+
 }
