@@ -10,11 +10,13 @@ interface PicturesRepository {
 
     suspend fun requestFeatured(): List<PicturesItem>
 
-    suspend fun storePictures(pictures: List<PicturesItem>)
-
     suspend fun storeFeatured(pictures: List<PicturesItem>)
 
     suspend fun getFeatured(): Flow<List<PicturesItem>>
+
+    suspend fun getFavorite(): Flow<List<PicturesItem>>
+
+    suspend fun updateFavorite(id: String)
 
 
 }
