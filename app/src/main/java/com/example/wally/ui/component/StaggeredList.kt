@@ -1,6 +1,7 @@
 package com.example.wally.ui.component
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.ui.screens.OnFavoriteClicked
 import com.example.wally.ui.screens.OnFeaturedItemClicked
 import com.example.wally.ui.screens.OnPictureItemClicked
 import com.example.wally.ui.screens.PICTURE_LIST_TEST_TAG
@@ -32,9 +34,10 @@ import com.example.wally.ui.screens.PICTURE_LIST_TEST_TAG
 fun StaggeredList(
     modifier: Modifier,
     featured: List<PicturesItem> = emptyList(),
-    onFeaturedItemClicked: OnFeaturedItemClicked,
+    onFeaturedItemClicked: OnFeaturedItemClicked? = null,
     pictures: LazyPagingItems<PicturesItem>,
-    onItemClicked: OnPictureItemClicked
+    onItemClicked: OnPictureItemClicked,
+    onFavoriteClicked: OnFavoriteClicked
 ) {
     val listState: LazyStaggeredGridState = rememberLazyStaggeredGridState()
 
@@ -47,7 +50,7 @@ fun StaggeredList(
             StaggeredGridCells.Adaptive(minSize = 175.dp)
         } else StaggeredGridCells.Fixed(2)
     ) {
-        if (featured.size > 3) {
+        if (featured.size > 3 && onFeaturedItemClicked != null) {
             item(span = StaggeredGridItemSpan.FullLine) {
                 Featured(featured, onFeaturedItemClicked)
             }
@@ -69,14 +72,17 @@ fun StaggeredList(
         items(pictures.itemCount,
             key = pictures.itemKey { it.id },
             contentType = pictures.itemContentType { it }) { index ->
-            pictures[index]?.let {
+            pictures[index]?.let {pictureItem ->
                 PictureItem(
                     modifier = Modifier
                         .fillMaxSize(),
-                    item = it,
+                    item = pictureItem,
                     onItemClicked = onItemClicked,
-                    height = (it.height / 12)
+                    height = (pictureItem.height / 12),
+                    onFavoriteClicked = onFavoriteClicked,
+                    favorite = pictureItem.favorite
                 )
+
             }
         }
     }
