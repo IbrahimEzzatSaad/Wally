@@ -4,20 +4,17 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.wally.data.api.model.PicturesItem
-import com.example.wally.data.api.model.Urls
 
-@Entity(tableName = "cached_pictures")
-data class CachedPicture (
-
+@Entity(tableName = "cached_favorite_pictures")
+data class CachedFavoritePicture (
     @PrimaryKey
     @ColumnInfo(name = "id") override var id: String = "",
-    @ColumnInfo(name = "favorite") var favorite: Boolean = false,
 
+    ): CachedPictureBase() {
 
-    ) : CachedPictureBase(){
     companion object {
-        fun fromDomain(picture: PicturesItem, isFavorite : Boolean): CachedPicture {
-            return CachedPicture().apply {
+        fun fromDomain(picture: PicturesItem): CachedFavoritePicture {
+            return CachedFavoritePicture().apply {
                 id = picture.id
                 description = picture.description
                 altDescription = picture.altDescription
@@ -26,9 +23,8 @@ data class CachedPicture (
                 links = picture.urls
                 height = picture.height
                 width = picture.width
-                favorite = isFavorite
             }
         }
+
     }
 }
-
