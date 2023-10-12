@@ -20,6 +20,6 @@ data class PicturesItem(
     val height: Int,
     @SerializedName("width")
     val width: Int,
-    var featured: Boolean = false
+    val favorite: Boolean = false
 )
 
