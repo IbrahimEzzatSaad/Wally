@@ -13,8 +13,8 @@ import com.example.wally.domain.usecases.NetworkException
 import com.example.wally.data.api.PicturesApi
 import com.example.wally.data.api.model.PicturesItem
 import com.example.wally.data.cache.Cache
-import com.example.wally.data.cache.model.CachedPicture
-import com.example.wally.data.cache.model.toDomain
+import com.example.wally.data.cache.model.CachedFavoritePicture
+import com.example.wally.data.cache.model.CachedFeaturedPicture
 import com.example.wally.data.paging.PicturesRemoteMediator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -42,7 +42,7 @@ class PicturesRepositoryImp @Inject constructor(
 
 
             return pager.flow.map { data ->
-                data.map { it.toDomain() }
+                data.map { it.toDomain(it.favorite) }
             }
         } catch (exception: HttpException) {
             throw NetworkException(exception.message ?: "Code ${exception.code()}")
@@ -61,18 +61,8 @@ class PicturesRepositoryImp @Inject constructor(
 
     override suspend fun storeFeatured(pictures: List<PicturesItem>) {
         cache.deleteFeatured()
-        pictures.onEach { it.featured = true }
         pictures.forEach { picture ->
-            Log.i("Featured_Item:", picture.toString())
-            cache.storePictures(CachedPicture.fromDomain(picture))
-        }
-    }
-
-    override suspend fun storePictures(pictures: List<PicturesItem>) {
-        cache.deletePictures()
-        pictures.forEach { picture ->
-            Log.i("ListInformation:", picture.toString())
-            cache.storePictures(CachedPicture.fromDomain(picture))
+            cache.insertFeatured(CachedFeaturedPicture.fromDomain(picture))
         }
     }
 
@@ -82,5 +72,21 @@ class PicturesRepositoryImp @Inject constructor(
             .map { picturesList ->
                 picturesList.map { it.toDomain() }
             }
+    }
+
+    override suspend fun getFavorite(): Flow<List<PicturesItem>> {
+        return cache.getFavorite()
+            .distinctUntilChanged() // ensures only events with new information get to the subscriber.
+            .map { picturesList ->
+                picturesList.map { it.toDomain() }
+            }
+    }
+
+    override suspend fun updateFavorite(id: String) {
+        if(cache.getFavoriteById(id) == null){
+            val picture = cache.getPictureById(id)!!.toDomain()
+            cache.insertFavorite(CachedFavoritePicture.fromDomain(picture) )
+        }else
+            cache.deleteFavorite(id)
     }
 }
