@@ -5,6 +5,9 @@ import androidx.room.Room
 import com.example.wally.data.cache.Cache
 import com.example.wally.data.cache.PicturesDatabase
 import com.example.wally.data.cache.RoomCache
+import com.example.wally.data.cache.daos.FavoriteDao
+import com.example.wally.data.cache.daos.FeaturedDao
+import com.example.wally.data.cache.daos.PageKeyDao
 import com.example.wally.data.cache.daos.PicturesDao
 import com.example.wally.data.cache.model.Converter
 import dagger.Binds
@@ -42,6 +45,21 @@ abstract class CacheModule {
         fun providePicturesDao(
             picturesDatabase: PicturesDatabase
         ): PicturesDao = picturesDatabase.picturesDao()
+
+        @Provides
+        fun provideFavoritesDao(
+            picturesDatabase: PicturesDatabase
+        ): FavoriteDao = picturesDatabase.favoritesDao()
+
+        @Provides
+        fun provideFeaturedDao(
+            picturesDatabase: PicturesDatabase
+        ): FeaturedDao = picturesDatabase.featuredDao()
+
+        @Provides
+        fun providePageKeyDao(
+            picturesDatabase: PicturesDatabase
+        ): PageKeyDao = picturesDatabase.pageKeyDao()
 
     }
 }
