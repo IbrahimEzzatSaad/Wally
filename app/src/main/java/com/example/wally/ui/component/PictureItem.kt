@@ -33,15 +33,19 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.wally.Duration
 import com.example.wally.R
 import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.ui.screens.OnFavoriteClicked
 import com.example.wally.ui.screens.OnPictureItemClicked
 import com.exyte.animatednavbar.items.dropletbutton.DropletButton
+import com.example.wally.ui.theme.Tulip
 
 @Composable
 fun PictureItem(
     item: PicturesItem,
     onItemClicked: OnPictureItemClicked,
+    onFavoriteClicked: OnFavoriteClicked,
     modifier: Modifier = Modifier,
-    height: Int
+    height: Int,
+    favorite: Boolean = false
 ) {
     Card(
         modifier = Modifier
@@ -57,7 +61,7 @@ fun PictureItem(
             defaultElevation = 8.dp
         )
     ) {
-        var favorite by remember { mutableStateOf(false) }
+        var favorite by remember { mutableStateOf(favorite) }
 
         val painter = rememberAsyncImagePainter(item.urls.small)
 
@@ -76,29 +80,24 @@ fun PictureItem(
                 contentDescription = "custom transition based on painter state"
             )
 
-            Card(modifier = Modifier.align(Alignment.BottomEnd)
-                .padding(6.dp)
-                .height(30.dp)
-                .width(30.dp)
-                .alpha(if(favorite) 1f else 0.4f),
-                shape = CircleShape,
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 8.dp
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                ),){
-                DropletButton(
-                    modifier = Modifier.fillMaxSize().padding(5.dp),
-                    isSelected = favorite,
-                    onClick = {
-                        favorite = !favorite
-                    },
-                    icon = R.drawable.heart,
-                    dropletColor = Color.Red,
-                    animationSpec = tween(durationMillis = Duration, easing = LinearEasing)
-                )
-            }
+            DropletButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(6.dp)
+                    .height(30.dp)
+                    .width(30.dp)
+                    .alpha(if (favorite) 1f else 0.6f),
+                isSelected = favorite,
+                onClick = {
+                    favorite = !favorite
+                    onFavoriteClicked(item.id)
+                },
+
+                icon = R.drawable.heart,
+                dropletColor = Tulip,
+                animationSpec = tween(durationMillis = Duration, easing = LinearEasing)
+            )
+
         }
     }
 }
