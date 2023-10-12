@@ -9,6 +9,7 @@ import com.example.wally.data.api.ApiParameters.PAGE_SIZE
 import com.example.wally.data.api.PicturesApi
 import com.example.wally.data.cache.Cache
 import com.example.wally.data.cache.model.CachedPicture
+import com.example.wally.data.cache.model.PageKeyEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -17,10 +18,11 @@ import java.io.IOException
 @OptIn(ExperimentalPagingApi::class)
 class PicturesRemoteMediator(
     private val cache: Cache,
-    private val picturesApi: PicturesApi) : RemoteMediator<Int, CachedPicture>() {
+    private val picturesApi: PicturesApi
+) : RemoteMediator<Int, CachedPicture>() {
 
     override suspend fun initialize(): InitializeAction {
-        return InitializeAction.SKIP_INITIAL_REFRESH
+        return InitializeAction.LAUNCH_INITIAL_REFRESH
     }
 
     override suspend fun load(
@@ -33,11 +35,13 @@ class PicturesRemoteMediator(
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND ->
                     return MediatorResult.Success(endOfPaginationReached = true)
+
                 LoadType.APPEND -> {
                     withContext(Dispatchers.IO) {
-                        val count = cache.getItemsCount()
-                        Log.i("Page number:","$count / $PAGE_SIZE = " +  ((count / PAGE_SIZE) + 1).toString())
-                        return@withContext (count / PAGE_SIZE) + 1
+                        val next = cache.getNexPage()
+                        Log.i("Next Page: ", next.toString())
+                        cache.insertPageKey(pageKeyEntity = PageKeyEntity(0, next + 1, next))
+                        return@withContext next
                     }
                 }
             }
@@ -47,10 +51,12 @@ class PicturesRemoteMediator(
             // Retrofit's Coroutine CallAdapter dispatches on a worker
             // thread.
 
-            val response = picturesApi.getPictures(loadKey.toLong())
+            val response = picturesApi.getPictures(loadKey)
             if (loadType == LoadType.REFRESH) {
                 withContext(Dispatchers.IO) {
+                    cache.clearPageKeys()
                     cache.deletePictures()
+                    cache.insertPageKey(pageKeyEntity = PageKeyEntity(0, 2 , 1))
                 }
             }
 
@@ -59,7 +65,10 @@ class PicturesRemoteMediator(
             // in the DB.
             withContext(Dispatchers.IO) {
                 response.forEach {
-                    cache.storePictures(CachedPicture.fromDomain(it))
+                    if (cache.getPictureById(it.id) == null) {
+                        val isFavorite = cache.getFavoriteById(it.id)
+                        cache.insertPictures(CachedPicture.fromDomain(it, isFavorite != null))
+                    }
                 }
             }
 
