@@ -18,7 +18,7 @@ interface PicturesApi {
 
     @GET(ApiConstants.BASE_ENDPOINT )
     suspend fun getFeatured(
-        @Query("order_by") sort : String = "popular",
+        @Query("order_by") sort : String = "featured",
         @Query("per_page") numberItems : Int = 10,
         @Query("client_id") apiKey: String =  API_KEY
     ): ApiPictures
