@@ -31,6 +31,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.wally.ui.navigation.SplashScreen
 import com.example.wally.ui.navigation.AppNavHost
+import com.example.wally.ui.navigation.CategoriesScreen
+import com.example.wally.ui.navigation.DestinationButton
+import com.example.wally.ui.navigation.FavoriteScreen
+import com.example.wally.ui.navigation.HomeScreen
 import com.example.wally.ui.navigation.appScreens
 import com.example.wally.ui.navigation.dropletButtons
 import com.example.wally.ui.theme.BluishGray
@@ -69,11 +73,11 @@ private fun MyApp() {
     val currentDestination = currentBackStack?.destination
     val currentScreen =
         appScreens.find { it.route == currentDestination?.route } ?: SplashScreen
-    var selectedIndex by remember { mutableStateOf(0) }
+    val indexCurrentScreen = dropletButtons.indexOfFirst { it.destination.route == currentScreen.route }
+    var selectedIndex = if (indexCurrentScreen != -1) indexCurrentScreen else 0
 
-  
+
     Scaffold(
-
         modifier = Modifier.semantics {
             testTagsAsResourceId = true
         },
@@ -97,7 +101,27 @@ private fun MyApp() {
                 dropletButtons.forEachIndexed { index, it ->
                     DropletButton(modifier = Modifier.fillMaxSize(),
                         isSelected = selectedIndex == index,
-                        onClick = { selectedIndex = index
+                        onClick = {
+                            when(it.destination){
+                                FavoriteScreen -> {
+                                    if(currentScreen != FavoriteScreen){
+                                        navController.navigate(route = FavoriteScreen.route)
+                                    }
+                                }
+
+                                HomeScreen -> {
+                                    if(currentScreen != HomeScreen){
+                                        navController.navigate(route = HomeScreen.route)
+                                    }
+                                }
+
+                                CategoriesScreen -> {
+                                    if(currentScreen != CategoriesScreen){
+                                        navController.navigate(route = CategoriesScreen.route)
+                                    }
+                                }
+                            }
+                            selectedIndex = index
                         },
                         icon = it.icon,
                         dropletColor = White,
