@@ -2,6 +2,10 @@ package com.example.wally.ui.component
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,9 +37,12 @@ import com.example.wally.ui.screens.PICTURE_LIST_TEST_TAG
 @Composable
 fun StaggeredList(
     modifier: Modifier,
+    pictures: LazyPagingItems<PicturesItem>? = null,
     featured: List<PicturesItem> = emptyList(),
+    favorite: List<PicturesItem>? = null,
+    title: String? = null,
+    supTitle: String? = null,
     onFeaturedItemClicked: OnFeaturedItemClicked? = null,
-    pictures: LazyPagingItems<PicturesItem>,
     onItemClicked: OnPictureItemClicked,
     onFavoriteClicked: OnFavoriteClicked
 ) {
@@ -54,12 +61,15 @@ fun StaggeredList(
             item(span = StaggeredGridItemSpan.FullLine) {
                 Featured(featured, onFeaturedItemClicked)
             }
+        }
 
+
+        title?.let {
             item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
-                    text = "All",
+                    text = it,
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(5.dp),
+                    modifier = Modifier.padding(3.dp),
                     color = Color.White.copy(alpha = 0.9f)
                 )
             }
@@ -69,21 +79,55 @@ fun StaggeredList(
             }
         }
 
-        items(pictures.itemCount,
-            key = pictures.itemKey { it.id },
-            contentType = pictures.itemContentType { it }) { index ->
-            pictures[index]?.let {pictureItem ->
-                PictureItem(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    item = pictureItem,
-                    onItemClicked = onItemClicked,
-                    height = (pictureItem.height / 12),
-                    onFavoriteClicked = onFavoriteClicked,
-                    favorite = pictureItem.favorite
+        supTitle?.let {
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.padding(3.dp),
+                    color = Color.White.copy(alpha = 0.7f)
                 )
-
             }
+
+            item(span = StaggeredGridItemSpan.FullLine) {
+                Spacer(modifier = Modifier.size(5.dp))
+            }
+        }
+
+        pictures?.let {
+            items(pictures.itemCount,
+                key = pictures.itemKey { it.id },
+                contentType = pictures.itemContentType { it }) { index ->
+                pictures[index]?.let { pictureItem ->
+                    PictureItem(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        item = pictureItem,
+                        onItemClicked = onItemClicked,
+                        height = (pictureItem.height / 12),
+                        onFavoriteClicked = onFavoriteClicked
+                    )
+                }
+            }
+        }
+
+        favorite?.let {
+            items(favorite.size) { index ->
+                favorite[index].let { pictureItem ->
+                    PictureItem(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        item = pictureItem,
+                        onItemClicked = onItemClicked,
+                        height = (pictureItem.height / 12),
+                        onFavoriteClicked = onFavoriteClicked,
+                    )
+                }
+            }
+        }
+
+        item(span = StaggeredGridItemSpan.FullLine) {
+            Spacer(modifier = Modifier.size(60.dp))
         }
     }
 }

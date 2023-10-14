@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +46,7 @@ fun PictureItem(
     onFavoriteClicked: OnFavoriteClicked,
     modifier: Modifier = Modifier,
     height: Int,
-    favorite: Boolean = false
+
 ) {
     Card(
         modifier = Modifier
@@ -61,9 +62,9 @@ fun PictureItem(
             defaultElevation = 8.dp
         )
     ) {
-        var favorite by remember { mutableStateOf(favorite) }
+        var favorite by rememberSaveable { mutableStateOf(item.favorite) }
 
-        val painter = rememberAsyncImagePainter(item.urls.small)
+        val painter = rememberAsyncImagePainter(item.urls.regular)
 
         val transition by animateFloatAsState(
             targetValue = if (painter.state is AsyncImagePainter.State.Success) 1f else 0f,
