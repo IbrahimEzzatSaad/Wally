@@ -44,33 +44,35 @@ object PictureDetails : AppDestinations {
 
 
 @Stable
-data class Item(
+data class DestinationButton(
     @DrawableRes val icon: Int,
     var isSelected: Boolean,
     @StringRes val description: Int,
     val destination : AppDestinations
 )
 
+val appScreens = listOf(HomeScreen, PictureDetails, CategoriesScreen, SearchScreen, FavoriteScreen)
+
 val dropletButtons = listOf(
-    Item(
+    DestinationButton(
         icon = R.drawable.home,
         isSelected = false,
         description = R.string.home,
         destination = HomeScreen
     ),
-    Item(
+    DestinationButton(
         icon = R.drawable.categories,
         isSelected = false,
         description = R.string.categories,
         destination = CategoriesScreen
     ),
-    Item(
+    DestinationButton(
         icon = R.drawable.search,
         isSelected = false,
         description = R.string.search,
         destination = SearchScreen
     ),
-    Item(
+    DestinationButton(
         icon = R.drawable.heart,
         isSelected = false,
         description = R.string.favorite,

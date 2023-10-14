@@ -1,12 +1,11 @@
 package com.example.wally.ui.navigation
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.core.net.toUri
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.wally.ui.screens.FavoriteScreen
 import com.example.wally.ui.screens.HomeScreen
 import com.example.wally.ui.screens.SplashScreen
 
@@ -38,6 +37,11 @@ fun AppNavHost(
             })
         }
 
+        composable(route = FavoriteScreen.route) {
+            FavoriteScreen(modifier = modifier,onPictureItemClicked = {
+                /*navController.navigateToSinglePicture(it)*/
+            })
+        }
         /*composable(
             route = PictureDetails.route
         ) { navBackStackEntry ->
@@ -86,4 +90,3 @@ private fun NavHostController.navigateToSinglePicture(picture: PicturesItem) {
     }
 }*/
 
-val appScreens = listOf(HomeScreen, PictureDetails)
