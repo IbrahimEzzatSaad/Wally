@@ -58,8 +58,6 @@ fun HomeScreen(
             pictures.retry()
         })
 
-        Log.i("Pictures", pictures.itemSnapshotList.items.toString())
-
         if(uiState.errorMessage.isNotEmpty() && !uiState.isLoading){
             Toast.makeText(LocalContext.current, uiState.errorMessage, Toast.LENGTH_SHORT)
                 .show()
@@ -72,7 +70,7 @@ fun HomeScreen(
             ),
             exit = fadeOut(
                 // Overwrites the default animation with tween
-                animationSpec = tween(durationMillis = 250)
+                animationSpec = tween(durationMillis = 2500)
             )
         ) {
             Box(
@@ -85,6 +83,7 @@ fun HomeScreen(
                         StaggeredList(
                             modifier = modifier,
                             pictures = pictures,
+                            title = "All",
                             onItemClicked = onPictureItemClicked,
                             onFeaturedItemClicked = onFeaturedItemClicked,
                             featured = it,
