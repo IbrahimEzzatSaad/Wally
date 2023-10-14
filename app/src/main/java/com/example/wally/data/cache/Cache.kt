@@ -19,6 +19,9 @@ interface Cache {
 
     fun getItemsCount() : Int
 
+    suspend fun updatePictureToFavorite(id : String)
+
+
     fun getFeatured(): Flow<List<CachedFeaturedPicture>>
 
     suspend fun insertFeatured(vararg pictures: CachedFeaturedPicture)
@@ -26,7 +29,7 @@ interface Cache {
     fun deleteFeatured()
 
 
-    fun getFavorite(): Flow<List<CachedFavoritePicture>>
+    suspend fun getFavorite():List<CachedFavoritePicture>
 
     suspend fun insertFavorite(picture: CachedFavoritePicture)
 

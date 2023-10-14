@@ -29,5 +29,8 @@ abstract class PicturesDao {
     @Query("SELECT * FROM cached_pictures WHERE id = :id")
     abstract suspend fun getPictureById(id: String) : CachedPicture?
 
+    @Query("UPDATE cached_pictures SET favorite = NOT favorite WHERE id = :id")
+    abstract suspend fun updatePictureToFavorite(id: String)
+
 
 }

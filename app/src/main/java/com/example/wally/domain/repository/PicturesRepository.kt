@@ -14,7 +14,7 @@ interface PicturesRepository {
 
     suspend fun getFeatured(): Flow<List<PicturesItem>>
 
-    suspend fun getFavorite(): Flow<List<PicturesItem>>
+    suspend fun getFavorite(): List<PicturesItem>
 
     suspend fun updateFavorite(id: String)
 

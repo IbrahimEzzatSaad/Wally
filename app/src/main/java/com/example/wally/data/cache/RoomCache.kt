@@ -29,6 +29,7 @@ class RoomCache @Inject constructor(
     override suspend fun getPictureById(id: String): CachedPicture? = picturesDao.getPictureById(id)
 
     override fun getItemsCount() : Int = picturesDao.getItemsCount()
+    override suspend fun updatePictureToFavorite(id: String) = picturesDao.updatePictureToFavorite(id)
 
 
 
@@ -40,13 +41,14 @@ class RoomCache @Inject constructor(
 
 
 
-    override fun getFavorite(): Flow<List<CachedFavoritePicture>> = favoriteDao.getFavorite()
+    override suspend fun getFavorite(): List<CachedFavoritePicture> = favoriteDao.getFavorite()
 
     override suspend fun insertFavorite(picture: CachedFavoritePicture) = favoriteDao.insertFavorite(picture)
 
     override suspend fun deleteFavorite(id : String) = favoriteDao.deleteFavorite(id)
 
     override suspend fun getFavoriteById(id: String): CachedFavoritePicture?  = favoriteDao.getFavoriteById(id)
+
 
 
     override suspend fun insertPageKey(pageKeyEntity: PageKeyEntity) = pageKeyDao.insertPageKey(pageKeyEntity)

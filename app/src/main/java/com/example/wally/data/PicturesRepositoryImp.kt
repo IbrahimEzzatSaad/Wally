@@ -74,18 +74,18 @@ class PicturesRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun getFavorite(): Flow<List<PicturesItem>> {
+    override suspend fun getFavorite(): List<PicturesItem> {
         return cache.getFavorite()
-            .distinctUntilChanged() // ensures only events with new information get to the subscriber.
-            .map { picturesList ->
-                picturesList.map { it.toDomain() }
+            .map {
+                 it.toDomain(true)
             }
     }
 
     override suspend fun updateFavorite(id: String) {
         if(cache.getFavoriteById(id) == null){
             val picture = cache.getPictureById(id)!!.toDomain()
-            cache.insertFavorite(CachedFavoritePicture.fromDomain(picture) )
+            cache.insertFavorite(CachedFavoritePicture.fromDomain(picture))
+            cache.updatePictureToFavorite(id)
         }else
             cache.deleteFavorite(id)
     }
