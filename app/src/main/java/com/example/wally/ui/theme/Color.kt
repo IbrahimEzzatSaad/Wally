@@ -13,3 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 val Purple = Color(0xFF742DF6)
 val BluishGray = Color(0xFF1E2832)
 val Tulip = Color(0xFFFF8093)
+val OuterSpace = Color(0xFF414753)
+
+val Green = Color(0xff6FCF97)
+val Red = Color(0xffEB5757)
