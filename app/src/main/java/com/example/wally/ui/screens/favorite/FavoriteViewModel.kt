@@ -1,4 +1,4 @@
-package com.example.wally.ui.screens
+package com.example.wally.ui.screens.favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,9 +34,9 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    fun updateFavorites(id : String){
+    fun updateFavorites(item : PicturesItem){
         viewModelScope.launch(mainDispatcher) {
-            updateFavorite(id)
+            updateFavorite(item)
         }
     }
 

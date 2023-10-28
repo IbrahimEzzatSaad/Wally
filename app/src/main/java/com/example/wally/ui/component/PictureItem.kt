@@ -10,15 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,8 +31,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.wally.Duration
 import com.example.wally.R
 import com.example.wally.data.api.model.PicturesItem
-import com.example.wally.ui.screens.OnFavoriteClicked
-import com.example.wally.ui.screens.OnPictureItemClicked
+import com.example.wally.ui.OnFavoriteClicked
+import com.example.wally.ui.OnPictureItemClicked
 import com.exyte.animatednavbar.items.dropletbutton.DropletButton
 import com.example.wally.ui.theme.Tulip
 
@@ -91,7 +88,7 @@ fun PictureItem(
                 isSelected = favorite,
                 onClick = {
                     favorite = !favorite
-                    onFavoriteClicked(item.id)
+                    onFavoriteClicked(item)
                 },
 
                 icon = R.drawable.heart,

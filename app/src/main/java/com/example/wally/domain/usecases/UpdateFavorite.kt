@@ -5,6 +5,6 @@ import com.example.wally.domain.repository.PicturesRepository
 import javax.inject.Inject
 
 class UpdateFavorite @Inject constructor(private val picturesRepository: PicturesRepository) {
-    suspend operator fun invoke(id: String) = picturesRepository.updateFavorite(id)
+    suspend operator fun invoke(item: PicturesItem) = picturesRepository.updateFavorite(item)
 
 }
