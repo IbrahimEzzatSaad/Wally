@@ -1,7 +1,6 @@
-package com.example.wally.ui.screens
+package com.example.wally.ui.screens.home
 
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -25,6 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.ui.OnFeaturedItemClicked
+import com.example.wally.ui.OnPictureItemClicked
 import com.example.wally.ui.component.NoInternet
 import com.example.wally.ui.component.StaggeredList
 import com.example.wally.ui.theme.VioletsBlue
@@ -44,6 +45,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: PictureViewModel = hiltViewModel()
 ) {
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Surface(
         modifier = Modifier
@@ -101,7 +103,7 @@ fun HomeScreen(
                 }
 
                 PullRefreshIndicator(
-                    refreshing = uiState.isLoading,
+                    refreshing = isLoading,
                     state = state,
                     modifier = Modifier.align(Alignment.TopCenter),
                     backgroundColor = VioletsBlue

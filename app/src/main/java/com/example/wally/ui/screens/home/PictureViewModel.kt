@@ -1,4 +1,4 @@
-package com.example.wally.ui.screens
+package com.example.wally.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,11 +6,9 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.wally.data.api.model.PicturesItem
 import com.example.wally.domain.usecases.FetchFeatured
-import com.example.wally.domain.usecases.GetFavorite
 import com.example.wally.domain.usecases.GetFeatured
 import com.example.wally.domain.usecases.GetPictures
 import com.example.wally.domain.usecases.UpdateFavorite
-import com.example.wally.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
@@ -43,21 +40,20 @@ class PictureViewModel @Inject constructor(
         _featured.asStateFlow()
 
 
-
-    private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
 
     init {
         viewModelScope.launch(mainDispatcher) {
             try {
-                onNewUiState(true, "")
+                onNewUiState(true)
                 fetchFeatured()
                 subscribeToFeaturedUpdates()
                 subscribeToPicturesUpdates()
 
             } catch (e: IOException) {
-                e.message?.let { onNewUiState(false, it) }
+                onNewUiState(false)
                 subscribeToFeaturedUpdates()
                 subscribeToPicturesUpdates()
 
@@ -70,6 +66,7 @@ class PictureViewModel @Inject constructor(
         viewModelScope.launch(mainDispatcher) {
             getPictures().distinctUntilChanged().cachedIn(viewModelScope).collect {
                 onNewPicturesList(it)
+
             }
         }
     }
@@ -82,45 +79,40 @@ class PictureViewModel @Inject constructor(
         viewModelScope.launch(mainDispatcher) {
             getFeatured().distinctUntilChanged().collect {
                 onNewFeaturedList(it)
+
             }
         }
     }
 
-    private suspend fun onNewFeaturedList(pictures: List<PicturesItem>) {
-        _featured.emit(pictures)
-
-        if (pictures.isNotEmpty())
-            onNewUiState(false, "")
-        else
-            onNewUiState(false, uiState.value.errorMessage)
-
+    private suspend fun onNewFeaturedList(featured: List<PicturesItem>) {
+        if (this.featured.value == null){
+            _featured.emit(featured)
+        }else if(this.featured.value != featured && featured.size == 10) {
+            _featured.emit(featured)
+        }
+        onNewUiState(false)
     }
 
 
-    fun updateFavorites(id : String){
+    fun updateFavorites(item: PicturesItem) {
         viewModelScope.launch(mainDispatcher) {
-            updateFavorite(id)
+            updateFavorite(item)
         }
     }
 
 
-    private fun onNewUiState(loading: Boolean, error: String) {
-        if (_uiState.value != UiState(loading, error)) {
-            _uiState.update { currentUiState ->
-                currentUiState.copy(isLoading = loading, errorMessage = error)
-            }
-        }
+    private suspend fun onNewUiState(loading: Boolean) {
+        _isLoading.emit(loading)
     }
 
     fun retry() {
         viewModelScope.launch(mainDispatcher) {
             try {
-                onNewUiState(true, uiState.value.errorMessage)
+                onNewUiState(true)
                 fetchFeatured()
             } catch (e: IOException) {
-                e.message?.let { onNewUiState(loading = false, error = it) }
+                onNewUiState(loading = false)
             }
-
         }
     }
 }
