@@ -15,6 +15,7 @@ import com.example.wally.data.api.model.PicturesItem
 import com.example.wally.data.cache.Cache
 import com.example.wally.data.cache.model.CachedFavoritePicture
 import com.example.wally.data.cache.model.CachedFeaturedPicture
+import com.example.wally.data.paging.CategoryPagingSource
 import com.example.wally.data.paging.PicturesRemoteMediator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -30,33 +31,27 @@ class PicturesRepositoryImp @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun requestPictures(): Flow<PagingData<PicturesItem>> {
-        try {
-            val pager = Pager(
-                config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
-                remoteMediator = PicturesRemoteMediator(
-                    cache, api
-                )
-            ) {
-                cache.getPictures()
-            }
-
-
-            return pager.flow.map { data ->
-                data.map { it.toDomain(it.favorite) }
-            }
-        } catch (exception: HttpException) {
-            throw NetworkException(exception.message ?: "Code ${exception.code()}")
+        val pager = Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
+            remoteMediator = PicturesRemoteMediator(
+                cache, api
+            )
+        ) {
+            cache.getPictures()
         }
+
+
+        return pager.flow.map { data ->
+            data.map { it.toDomain(it.favorite) }
+        }
+
     }
 
     override suspend fun requestFeatured(): List<PicturesItem> {
 
-        try {
-            val results: ApiPictures = api.getFeatured()
-            return results.toList()
-        } catch (exception: HttpException) {
-            throw NetworkException(exception.message ?: "Code ${exception.code()}")
-        }
+        val results: ApiPictures = api.getFeatured()
+        return results.toList()
+
     }
 
     override suspend fun storeFeatured(pictures: List<PicturesItem>) {
@@ -77,16 +72,28 @@ class PicturesRepositoryImp @Inject constructor(
     override suspend fun getFavorite(): List<PicturesItem> {
         return cache.getFavorite()
             .map {
-                 it.toDomain(true)
+                it.toDomain(true)
             }
     }
 
-    override suspend fun updateFavorite(id: String) {
-        if(cache.getFavoriteById(id) == null){
-            val picture = cache.getPictureById(id)!!.toDomain()
-            cache.insertFavorite(CachedFavoritePicture.fromDomain(picture))
-            cache.updatePictureToFavorite(id)
-        }else
-            cache.deleteFavorite(id)
+    override suspend fun getCategoryList(id: String): Flow<PagingData<PicturesItem>> {
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
+            pagingSourceFactory = { CategoryPagingSource(api, id) }
+        ).flow.map { pagingData ->
+
+            pagingData.map { pictureItem ->
+
+                pictureItem.copy(favorite = if (cache.getFavoriteById(pictureItem.id) == null) false else true)
+            }
+        }
+    }
+
+    override suspend fun updateFavorite(item: PicturesItem) {
+        if (cache.getFavoriteById(item.id) == null) {
+            cache.insertFavorite(CachedFavoritePicture.fromDomain(item))
+            cache.updatePictureToFavorite(item.id)
+        } else
+            cache.deleteFavorite(item.id)
     }
 }

@@ -2,6 +2,7 @@ package com.example.wally.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -55,6 +56,29 @@ fun AppNavHost(
                 val viewModel = hiltViewModel<PictureViewModel>()
                 viewModel.getPictureById(it.id)
                 PictureDetailsScreen(modifier= modifier.padding(16.dp),viewModel = viewModel)
+            }
+            composable(route = CategoriesScreen.route) {
+
+                val viewModel: CategoryViewModel = hiltViewModel(it)
+
+                CategoriesScreen( onCategoryClicked = { id ->
+                    viewModel.startSubscribe(id)
+                    navController.navigate(route = CategoryListScreen.route)
+                })
+            }
+
+            composable(route = CategoryListScreen.route) {
+                val backStackEntry = remember(it) {
+                    navController.getBackStackEntry(CategoriesScreen.route)
+                }
+
+                val viewModel: CategoryViewModel = hiltViewModel(backStackEntry)
+
+                CategoryListScreen(
+                    viewModel = viewModel,
+                    onPictureItemClicked = {
+                        /*navController.navigateToSinglePicture(it)*/
+                    })
             }
         }
         */

@@ -16,7 +16,9 @@ interface PicturesRepository {
 
     suspend fun getFavorite(): List<PicturesItem>
 
-    suspend fun updateFavorite(id: String)
+    suspend fun getCategoryList(id: String): Flow<PagingData<PicturesItem>>
+
+    suspend fun updateFavorite(item: PicturesItem)
 
 
 }
