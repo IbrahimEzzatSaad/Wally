@@ -40,6 +40,7 @@ import com.example.wally.ui.navigation.AppNavHost
 import com.example.wally.ui.navigation.CategoriesScreen
 import com.example.wally.ui.navigation.FavoriteScreen
 import com.example.wally.ui.navigation.HomeScreen
+import com.example.wally.ui.navigation.SearchScreen
 import com.example.wally.ui.navigation.appScreens
 import com.example.wally.ui.navigation.dropletButtons
 import com.example.wally.ui.theme.BluishGray
@@ -163,6 +164,12 @@ private fun MyApp() {
                                     HomeScreen -> {
                                         if (currentScreen != HomeScreen) {
                                             navController.navigate(route = HomeScreen.route)
+                                        }
+                                    }
+
+                                    SearchScreen -> {
+                                        if (currentScreen != SearchScreen) {
+                                            navController.navigate(route = SearchScreen.route)
                                         }
                                     }
 

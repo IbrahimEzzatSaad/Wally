@@ -17,6 +17,7 @@ import com.example.wally.ui.screens.categorylist.CategoryListScreen
 import com.example.wally.ui.screens.categorylist.CategoryViewModel
 import com.example.wally.ui.screens.favorite.FavoriteScreen
 import com.example.wally.ui.screens.home.HomeScreen
+import com.example.wally.ui.screens.search.SearchScreen
 import com.example.wally.ui.screens.splash.SplashScreen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -54,6 +55,12 @@ fun AppNavHost(
 
             composable(route = FavoriteScreen.route) {
                 FavoriteScreen(onPictureItemClicked = {
+                    /*navController.navigateToSinglePicture(it)*/
+                })
+            }
+
+            composable(route = SearchScreen.route) {
+                SearchScreen(onPictureItemClicked = {
                     /*navController.navigateToSinglePicture(it)*/
                 })
             }
