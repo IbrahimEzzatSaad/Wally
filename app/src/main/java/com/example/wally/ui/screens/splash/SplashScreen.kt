@@ -1,4 +1,4 @@
-package com.example.wally.ui.screens
+package com.example.wally.ui.screens.splash
 
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.animateFloatAsState
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.wally.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -20,12 +19,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowCompat
-import com.example.wally.data.api.model.PicturesItem
 import kotlinx.coroutines.delay
 
 typealias OnTimeEnd = () -> Unit
