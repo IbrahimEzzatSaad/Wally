@@ -20,13 +20,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.wally.R
-import com.example.wally.ui.screens.OnRetryClicked
+import com.example.wally.ui.OnRetryClicked
 import com.example.wally.ui.theme.VioletsBlue
 
 @Composable
-fun NoInternet(retry: OnRetryClicked, enabled: Boolean) {
+fun NoInternet(modifier: Modifier, retry: OnRetryClicked, enabled: Boolean) {
 
-    Column(modifier = Modifier.padding(10.dp)) {
+    Column(modifier = modifier) {
         Text(
             text = "Not Internet Connection",
             style = MaterialTheme.typography.titleMedium,
@@ -46,7 +46,7 @@ fun NoInternet(retry: OnRetryClicked, enabled: Boolean) {
                 contentDescription = "No connection",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(510.dp)
+                    .height(400.dp)
                     .align(Alignment.Center)
             )
         }

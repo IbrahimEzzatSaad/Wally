@@ -42,13 +42,13 @@ import coil.disk.DiskCache
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.wally.data.api.model.PicturesItem
-import com.example.wally.ui.screens.OnFeaturedItemClicked
+import com.example.wally.ui.OnFeaturedItemClicked
 
 @Composable
 fun Featured(featured: List<PicturesItem>, onFeaturedClicked: OnFeaturedItemClicked) {
 
     Column(
-        modifier = Modifier
+        modifier = Modifier.padding(3.dp)
             .fillMaxWidth()
     ) {
 

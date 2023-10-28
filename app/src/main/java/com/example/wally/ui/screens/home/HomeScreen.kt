@@ -81,7 +81,7 @@ fun HomeScreen(
                 featured?.let {
                     if (it.size > 3) {
                         StaggeredList(
-                            modifier = modifier,
+                            modifier,
                             pictures = pictures,
                             title = "All",
                             onItemClicked = onPictureItemClicked,

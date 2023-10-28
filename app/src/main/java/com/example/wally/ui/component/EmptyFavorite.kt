@@ -21,9 +21,9 @@ import com.example.wally.R
 import com.example.wally.ui.theme.VioletsBlue
 
 @Composable
-fun EmptyFavorite() {
+fun EmptyFavorite(modifier: Modifier) {
 
-    Column(modifier = Modifier.padding(10.dp)) {
+    Column(modifier = modifier) {
         Text(
             text = "Oops! No Favorites to display!",
             style = MaterialTheme.typography.titleMedium,

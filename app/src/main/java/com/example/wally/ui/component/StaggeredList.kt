@@ -50,8 +50,7 @@ fun StaggeredList(
 
     LazyVerticalStaggeredGrid(
         modifier = modifier
-            .testTag(PICTURE_LIST_TEST_TAG)
-            .padding(10.dp),
+            .testTag(PICTURE_LIST_TEST_TAG),
         state = listState,
         columns = if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             StaggeredGridCells.Adaptive(minSize = 175.dp)
