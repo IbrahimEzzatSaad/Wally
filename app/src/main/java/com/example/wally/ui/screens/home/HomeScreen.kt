@@ -30,10 +30,6 @@ import com.example.wally.ui.component.NoInternet
 import com.example.wally.ui.component.StaggeredList
 import com.example.wally.ui.theme.VioletsBlue
 
-typealias OnPictureItemClicked = (PicturesItem) -> Unit
-typealias OnRetryClicked = () -> Unit
-typealias OnFeaturedItemClicked = (List<PicturesItem>, Int) -> Unit
-typealias OnFavoriteClicked = (String) -> Unit
 const val PICTURE_LIST_TEST_TAG = "pictures_list"
 
 
