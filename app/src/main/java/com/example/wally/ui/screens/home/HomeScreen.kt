@@ -1,7 +1,5 @@
 package com.example.wally.ui.screens.home
 
-
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -19,7 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -41,25 +38,19 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: PictureViewModel = hiltViewModel()
 ) {
+    val featured by viewModel.featured.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val pictures: LazyPagingItems<PicturesItem> = viewModel.pictures.collectAsLazyPagingItems()
+    val state = rememberPullRefreshState(isLoading, {
+        viewModel.retry()
+        pictures.retry()
+    })
 
     Surface(
         modifier = Modifier
             .fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        val featured by viewModel.featured.collectAsState()
-        val uiState by viewModel.uiState.collectAsState()
-        val pictures: LazyPagingItems<PicturesItem> = viewModel.pictures.collectAsLazyPagingItems()
-        val state = rememberPullRefreshState(uiState.isLoading, {
-            viewModel.retry()
-            pictures.retry()
-        })
-
-        if(uiState.errorMessage.isNotEmpty() && !uiState.isLoading){
-            Toast.makeText(LocalContext.current, uiState.errorMessage, Toast.LENGTH_SHORT)
-                .show()
-        }
 
         AnimatedVisibility(
             visible = true,
@@ -71,13 +62,22 @@ fun HomeScreen(
                 animationSpec = tween(durationMillis = 2500)
             )
         ) {
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .pullRefresh(state)
             ) {
+
                 featured?.let {
-                    if (it.size > 3) {
+
+                    if(it.isEmpty()){
+                        NoInternet(modifier,
+                            {
+                                viewModel.retry()
+                                pictures.retry()
+                            }, isLoading)
+                    }else{
                         StaggeredList(
                             modifier,
                             pictures = pictures,
@@ -85,16 +85,9 @@ fun HomeScreen(
                             onItemClicked = onPictureItemClicked,
                             onFeaturedItemClicked = onFeaturedItemClicked,
                             featured = it,
-                            onFavoriteClicked = {id ->
-                                viewModel.updateFavorites(id) }
-
+                            onFavoriteClicked = { item  ->
+                                viewModel.updateFavorites(item) }
                         )
-
-                    } else if (it.isEmpty()){
-                        NoInternet({
-                            viewModel.retry()
-                            pictures.retry()
-                        }, uiState.isLoading)
                     }
                 }
 
