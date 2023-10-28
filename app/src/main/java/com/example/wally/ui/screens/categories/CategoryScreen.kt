@@ -25,13 +25,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.example.wally.ui.OnCategoryClicked
 import com.example.wally.ui.model.Category
 import com.example.wally.ui.model.categories
-import com.example.wally.ui.screens.categorylist.CategoryViewModel
 
 @Composable
 fun CategoriesScreen(

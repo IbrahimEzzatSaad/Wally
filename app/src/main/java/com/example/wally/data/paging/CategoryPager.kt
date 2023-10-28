@@ -1,9 +1,7 @@
 package com.example.wally.data.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.wally.data.api.ApiParameters.PAGE_SIZE
 import com.example.wally.data.api.PicturesApi
 import com.example.wally.data.api.model.PicturesItem
 
@@ -21,7 +19,7 @@ class CategoryPagingSource(
             val response = picturesApi.getCategories(id,currentPage.toLong())
 
             // Extract the data from the API response
-            val items = response.distinct() ?: emptyList()
+            val items = response.distinct()
 
             // Calculate the next page key (if available)
             val nextPage = if (items.isEmpty()) {

@@ -2,7 +2,6 @@ package com.example.wally.ui.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Stable
 import com.example.wally.R
 

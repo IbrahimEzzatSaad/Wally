@@ -8,7 +8,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -36,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.wally.ui.component.ConnectivityStatus
 import com.example.wally.ui.navigation.SplashScreen
 import com.example.wally.ui.navigation.AppNavHost
 import com.example.wally.ui.navigation.CategoriesScreen
@@ -47,8 +45,6 @@ import com.example.wally.ui.navigation.dropletButtons
 import com.example.wally.ui.theme.BluishGray
 import com.example.wally.ui.theme.DarkJungle
 import com.example.wally.ui.theme.WallyTheme
-import com.example.wally.utils.ConnectionState
-import com.example.wally.utils.connectivityState
 import com.exyte.animatednavbar.AnimatedNavigationBar
 import com.exyte.animatednavbar.animation.balltrajectory.Teleport
 import com.exyte.animatednavbar.animation.indendshape.Height
