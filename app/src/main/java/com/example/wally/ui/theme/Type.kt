@@ -13,9 +13,9 @@ import com.example.wally.R
 val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = FontFamily( Font(R.font.inter_bold)),
-        fontSize = 25.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+        fontSize = 23.sp,
+        lineHeight = 23.sp,
+        letterSpacing = 0.6.sp
     ),
 
 

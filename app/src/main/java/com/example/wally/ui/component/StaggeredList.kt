@@ -64,6 +64,7 @@ fun StaggeredList(
             StaggeredGridCells.Adaptive(minSize = 175.dp)
         } else StaggeredGridCells.Fixed(2)
     ) {
+
         if (featured.size > 3 && onFeaturedItemClicked != null) {
             item(span = StaggeredGridItemSpan.FullLine) {
                 Featured(featured, onFeaturedItemClicked)
@@ -75,14 +76,14 @@ fun StaggeredList(
             item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(3.dp),
-                    color = Color.White.copy(alpha = 0.9f)
+                    color = Color.White
                 )
             }
 
             item(span = StaggeredGridItemSpan.FullLine) {
-                Spacer(modifier = Modifier.size(5.dp))
+                Spacer(modifier = Modifier.size(3.dp))
             }
         }
 
@@ -101,6 +102,7 @@ fun StaggeredList(
             }
         }
 
+
         pictures?.let {
             items(pictures.itemCount,
                 key = pictures.itemKey { it.id },
@@ -117,6 +119,7 @@ fun StaggeredList(
                 }
             }
         }
+
 
         favorite?.let {
             items(favorite.size) { index ->
