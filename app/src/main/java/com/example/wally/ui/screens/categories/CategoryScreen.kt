@@ -45,12 +45,11 @@ fun CategoriesScreen(
     ) {
 
         Column(  modifier = Modifier
-            .padding(9.dp)
             .verticalScroll(rememberScrollState())) {
             categories.forEach{
                 Category(it, onCategoryClicked)
             }
-            Spacer(modifier = Modifier.size(60.dp))
+            Spacer(modifier = Modifier.size(65.dp))
         }
 
     }
