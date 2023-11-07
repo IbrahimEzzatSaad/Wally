@@ -18,6 +18,8 @@ interface PicturesRepository {
 
     suspend fun getCategoryList(id: String): Flow<PagingData<PicturesItem>>
 
+    suspend fun getSearch(query: String): Flow<PagingData<PicturesItem>>
+
     suspend fun updateFavorite(item: PicturesItem)
 
 

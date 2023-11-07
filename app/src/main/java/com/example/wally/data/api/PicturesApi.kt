@@ -3,6 +3,7 @@ package com.example.wally.data.api
 import com.example.wally.data.api.ApiParameters.API_KEY
 import com.example.wally.data.api.ApiParameters.PAGE_SIZE
 import com.example.wally.data.api.model.ApiPictures
+import com.example.wally.data.api.model.ApiSearch
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -24,7 +25,6 @@ interface PicturesApi {
         @Query("client_id") apiKey: String =  API_KEY
     ): ApiPictures
 
-
     @GET(ApiConstants.CATEGORIES_ENDPOINT)
     suspend fun getCategories(
         @Path("id") id: String, // Dynamic value to be included in the URL
@@ -32,4 +32,12 @@ interface PicturesApi {
         @Query("per_page") numberItems: Int = PAGE_SIZE,
         @Query("client_id") apiKey: String = API_KEY
     ): ApiPictures
+
+    @GET(ApiConstants.SEARCH_ENDPOINT)
+    suspend fun getSearch(
+        @Query("query") query: String,
+        @Query("page") page: Long,
+        @Query("per_page") numberItems: Int = PAGE_SIZE,
+        @Query("client_id") apiKey: String = API_KEY
+    ): ApiSearch
 }

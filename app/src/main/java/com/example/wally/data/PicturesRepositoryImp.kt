@@ -15,6 +15,7 @@ import com.example.wally.data.cache.model.CachedFavoritePicture
 import com.example.wally.data.cache.model.CachedFeaturedPicture
 import com.example.wally.data.paging.CategoryPagingSource
 import com.example.wally.data.paging.PicturesRemoteMediator
+import com.example.wally.data.paging.SearchPagingSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -77,6 +78,19 @@ class PicturesRepositoryImp @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
             pagingSourceFactory = { CategoryPagingSource(api, id) }
+        ).flow.map { pagingData ->
+
+            pagingData.map { pictureItem ->
+
+                pictureItem.copy(favorite = if (cache.getFavoriteById(pictureItem.id) == null) false else true)
+            }
+        }
+    }
+
+    override suspend fun getSearch(query: String): Flow<PagingData<PicturesItem>> {
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
+            pagingSourceFactory = { SearchPagingSource(api, query) }
         ).flow.map { pagingData ->
 
             pagingData.map { pictureItem ->
