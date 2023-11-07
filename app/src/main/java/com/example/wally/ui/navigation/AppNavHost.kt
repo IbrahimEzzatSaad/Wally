@@ -31,8 +31,8 @@ fun AppNavHost(
         ConnectivityStatus()
 
         NavHost(
-            modifier = Modifier.padding(start = 8.dp,
-                end = 8.dp),
+            modifier = Modifier.padding(start = 15.dp,
+                end = 15.dp),
             navController = navController,
             startDestination = SplashScreen.route,
         ) {
