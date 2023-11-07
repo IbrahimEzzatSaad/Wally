@@ -15,5 +15,6 @@ val BluishGray = Color(0xFF1E2832)
 val Tulip = Color(0xFFFF8093)
 val OuterSpace = Color(0xFF414753)
 
-val Green = Color(0xff6FCF97)
-val Red = Color(0xffEB5757)
+val Green = Color(0xFF6FCF97)
+val Red = Color(0xFFEB5757)
+val Gunmetal = Color(0xFF2A303E)
