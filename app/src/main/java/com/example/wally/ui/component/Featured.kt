@@ -40,7 +40,7 @@ import com.example.wally.ui.OnFeaturedItemClicked
 fun Featured(featured: List<PicturesItem>, onFeaturedClicked: OnFeaturedItemClicked) {
 
     Column(
-        modifier = Modifier.padding(3.dp)
+        modifier = Modifier
             .fillMaxWidth()
     ) {
 
@@ -105,7 +105,7 @@ fun Featured(featured: List<PicturesItem>, onFeaturedClicked: OnFeaturedItemClic
                 )
                 FeaturedImage(
                     rememberAsyncImagePainter(featured[2].urls.regular),
-                    modifier = Modifier.clickable { onFeaturedClicked(featured, 2) },
+                    modifier = Modifier.clickable { onFeaturedClicked(featured, 2) }.padding(start = 5.dp , end= 5.dp),
                     color = featured[2].color
                 )
 

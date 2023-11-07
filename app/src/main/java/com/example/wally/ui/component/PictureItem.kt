@@ -47,7 +47,6 @@ fun PictureItem(
 ) {
     Card(
         modifier = Modifier
-            .padding(5.dp)
             .clip(RoundedCornerShape(8.dp))
             .clickable { onItemClicked(item) }
             .height(height.dp),
