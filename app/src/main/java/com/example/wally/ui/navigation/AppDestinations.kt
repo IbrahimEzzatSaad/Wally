@@ -42,7 +42,7 @@ object CategoryListScreen : AppDestinations{
 
 }
 
-object PictureDetails : AppDestinations {
+object PictureScreen : AppDestinations {
     override val title = "Details"
     override val route = "picture"
     const val pictureKey = "picture_argument"
@@ -57,7 +57,9 @@ data class DestinationButton(
     val destination : AppDestinations
 )
 
-val appScreens = listOf(HomeScreen, PictureDetails, CategoriesScreen, SearchScreen, FavoriteScreen, CategoryListScreen)
+val appScreens = listOf(HomeScreen, PictureScreen, CategoriesScreen, SearchScreen, FavoriteScreen, CategoryListScreen)
+
+
 
 val dropletButtons = listOf(
     DestinationButton(

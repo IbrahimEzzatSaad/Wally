@@ -1,5 +1,7 @@
 package com.example.wally.ui.navigation
 
+import android.os.Bundle
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,15 +13,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.wally.data.api.model.PicturesItem
 import com.example.wally.ui.component.ConnectivityStatus
 import com.example.wally.ui.screens.categories.CategoriesScreen
 import com.example.wally.ui.screens.categorylist.CategoryListScreen
 import com.example.wally.ui.screens.categorylist.CategoryViewModel
 import com.example.wally.ui.screens.favorite.FavoriteScreen
 import com.example.wally.ui.screens.home.HomeScreen
+import com.example.wally.ui.screens.picture.PictureScreen
 import com.example.wally.ui.screens.search.SearchScreen
 import com.example.wally.ui.screens.splash.SplashScreen
+import com.google.gson.Gson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.net.URLDecoder
+import java.net.URLEncoder
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalCoroutinesApi::class)
 @Composable
@@ -85,11 +92,26 @@ fun AppNavHost(
                 CategoryListScreen(
                     viewModel = viewModel,
                     onPictureItemClicked = {
-                        /*navController.navigateToSinglePicture(it)*/
+                        val json = Gson().toJson(it)
+
+                        // Encode the JSON string to UTF-8 byte array
+                        val utf8Bytes = URLEncoder.encode(json, "utf-8")
+
+                        navController.navigate(route = PictureScreen.route + "/$utf8Bytes")
                     })
             }
 
+            composable(route = PictureScreen.route + "/{picture}") {
+                val argument = it.arguments?.getString("picture")
 
+
+                if (argument != null) {
+                    val picture = Gson().fromJson(URLDecoder.decode(argument, "utf-8"), PicturesItem::class.java)
+                    PictureScreen(picture)
+
+                }
+
+            }
         }
     }
 }
