@@ -63,7 +63,7 @@ class PicturesRepositoryImp @Inject constructor(
         return cache.getFeatured()
             .distinctUntilChanged() // ensures only events with new information get to the subscriber.
             .map { picturesList ->
-                picturesList.map { it.toDomain() }
+                picturesList.map { it.toDomain().copy(favorite = if (cache.getFavoriteById(it.id) == null) false else true) }
             }
     }
 
