@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import com.example.wally.ui.OnCategoryClicked
+import com.example.wally.utils.OnCategoryClicked
 import com.example.wally.ui.model.Category
 import com.example.wally.ui.model.categories
 
@@ -38,26 +39,22 @@ fun CategoriesScreen(
 ) {
 
 
-    Surface(
+    Column(
         modifier = modifier
-            .fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+            .verticalScroll(rememberScrollState())
     ) {
-
-        Column(  modifier = Modifier
-            .verticalScroll(rememberScrollState())) {
-            categories.forEach{
-                Category(it, onCategoryClicked)
-            }
-            Spacer(modifier = Modifier.size(65.dp))
+        categories.forEach {
+            Category(it, onCategoryClicked)
         }
-
+        Spacer(modifier = Modifier.size(65.dp))
     }
+
+
 }
 
 
 @Composable
-fun Category(category: Category, onCategoryClicked: OnCategoryClicked){
+fun Category(category: Category, onCategoryClicked: OnCategoryClicked) {
 
     val painter = rememberAsyncImagePainter(category.link)
 
@@ -67,8 +64,10 @@ fun Category(category: Category, onCategoryClicked: OnCategoryClicked){
             .height(120.dp)
             .padding(6.dp)
             .clip(RoundedCornerShape(10.dp))
+            .shadow(10.dp)
             .clickable {
-                onCategoryClicked(category.slug) },
+                onCategoryClicked(category.slug)
+            },
     ) {
 
         Image(
@@ -79,7 +78,12 @@ fun Category(category: Category, onCategoryClicked: OnCategoryClicked){
             alignment = Alignment.Center
         )
 
-        Surface(modifier = Modifier.fillMaxSize(), color = if (painter.state is AsyncImagePainter.State.Success) Color.Black.copy(0.3f) else Color(category.color.toColorInt())) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = if (painter.state is AsyncImagePainter.State.Success) Color.Black.copy(0.3f) else Color(
+                category.color.toColorInt()
+            )
+        ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.CenterStart
@@ -88,7 +92,7 @@ fun Category(category: Category, onCategoryClicked: OnCategoryClicked){
                 Text(
                     modifier = Modifier.padding(20.dp),
                     text = category.title, style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = Color.White,
                     fontSize = 30.sp
                 )
             }
