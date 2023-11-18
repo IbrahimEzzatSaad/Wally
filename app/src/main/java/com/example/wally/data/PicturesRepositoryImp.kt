@@ -9,7 +9,7 @@ import com.example.wally.data.api.ApiParameters.PAGE_SIZE
 import com.example.wally.data.api.model.ApiPictures
 import com.example.wally.domain.repository.PicturesRepository
 import com.example.wally.data.api.PicturesApi
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 import com.example.wally.data.cache.Cache
 import com.example.wally.data.cache.model.CachedFavoritePicture
 import com.example.wally.data.cache.model.CachedFeaturedPicture
@@ -28,7 +28,7 @@ class PicturesRepositoryImp @Inject constructor(
 
 
     @OptIn(ExperimentalPagingApi::class)
-    override suspend fun requestPictures(): Flow<PagingData<PicturesItem>> {
+    override suspend fun requestPictures(): Flow<PagingData<PictureModel>> {
         val pager = Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
             remoteMediator = PicturesRemoteMediator(
@@ -45,21 +45,21 @@ class PicturesRepositoryImp @Inject constructor(
 
     }
 
-    override suspend fun requestFeatured(): List<PicturesItem> {
+    override suspend fun requestFeatured(): List<PictureModel> {
 
         val results: ApiPictures = api.getFeatured()
         return results.toList()
 
     }
 
-    override suspend fun storeFeatured(pictures: List<PicturesItem>) {
+    override suspend fun storeFeatured(pictures: List<PictureModel>) {
         cache.deleteFeatured()
         pictures.forEach { picture ->
             cache.insertFeatured(CachedFeaturedPicture.fromDomain(picture))
         }
     }
 
-    override suspend fun getFeatured(): Flow<List<PicturesItem>> {
+    override suspend fun getFeatured(): Flow<List<PictureModel>> {
         return cache.getFeatured()
             .distinctUntilChanged() // ensures only events with new information get to the subscriber.
             .map { picturesList ->
@@ -67,14 +67,14 @@ class PicturesRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun getFavorite(): List<PicturesItem> {
+    override suspend fun getFavorite(): List<PictureModel> {
         return cache.getFavorite()
             .map {
                 it.toDomain(true)
             }
     }
 
-    override suspend fun getCategoryList(id: String): Flow<PagingData<PicturesItem>> {
+    override suspend fun getCategoryList(id: String): Flow<PagingData<PictureModel>> {
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
             pagingSourceFactory = { CategoryPagingSource(api, id) }
@@ -87,7 +87,7 @@ class PicturesRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun getSearch(query: String): Flow<PagingData<PicturesItem>> {
+    override suspend fun getSearch(query: String): Flow<PagingData<PictureModel>> {
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
             pagingSourceFactory = { SearchPagingSource(api, query) }
@@ -100,7 +100,7 @@ class PicturesRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun updateFavorite(item: PicturesItem) {
+    override suspend fun updateFavorite(item: PictureModel) {
         if (cache.getFavoriteById(item.id) == null) {
             cache.insertFavorite(CachedFavoritePicture.fromDomain(item))
             cache.updatePictureToFavorite(item.id)

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 import com.example.wally.domain.usecases.GetCategoryList
 import com.example.wally.domain.usecases.UpdateFavorite
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +25,9 @@ class CategoryViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _category: MutableStateFlow<PagingData<PicturesItem>> =
+    private val _category: MutableStateFlow<PagingData<PictureModel>> =
         MutableStateFlow(value = PagingData.empty())
-    val category: StateFlow<PagingData<PicturesItem>> =
+    val category: StateFlow<PagingData<PictureModel>> =
         _category.asStateFlow()
 
 
@@ -56,7 +56,7 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onNewCategoryList(pictures: PagingData<PicturesItem>) {
+    private suspend fun onNewCategoryList(pictures: PagingData<PictureModel>) {
         _category.emit(pictures)
         _isLoading.emit(false)
     }
@@ -67,7 +67,7 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    fun updateFavorites(item : PicturesItem){
+    fun updateFavorites(item : PictureModel){
         viewModelScope.launch(mainDispatcher) {
             updateFavorite(item)
         }

@@ -1,7 +1,7 @@
 package com.example.wally.data.cache.model
 
 import androidx.room.ColumnInfo
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 import com.example.wally.data.api.model.Urls
 open class CachedPictureBase (
     @ColumnInfo(name = "id") open var id: String = "",
@@ -13,8 +13,8 @@ open class CachedPictureBase (
     @ColumnInfo(name = "height") var height: Int = 0,
     @ColumnInfo(name = "width") var width: Int = 0,
 ) {
-    fun toDomain(isFavorite: Boolean = false): PicturesItem {
-        return PicturesItem(
+    fun toDomain(isFavorite: Boolean = false): PictureModel {
+        return PictureModel(
             id,
             description,
             altDescription,

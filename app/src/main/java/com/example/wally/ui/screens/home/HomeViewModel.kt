@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 import com.example.wally.domain.usecases.FetchFeatured
 import com.example.wally.domain.usecases.GetFeatured
 import com.example.wally.domain.usecases.GetPictures
@@ -21,7 +21,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class PictureViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val getPictures: GetPictures,
     private val getFeatured: GetFeatured,
     private val fetchFeatured: FetchFeatured,
@@ -29,14 +29,14 @@ class PictureViewModel @Inject constructor(
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    private val _pictures: MutableStateFlow<PagingData<PicturesItem>> =
+    private val _pictures: MutableStateFlow<PagingData<PictureModel>> =
         MutableStateFlow(value = PagingData.empty())
-    val pictures: StateFlow<PagingData<PicturesItem>> =
+    val pictures: StateFlow<PagingData<PictureModel>> =
         _pictures.asStateFlow()
 
 
-    private val _featured = MutableStateFlow<List<PicturesItem>?>(null)
-    val featured: StateFlow<List<PicturesItem>?> =
+    private val _featured = MutableStateFlow<List<PictureModel>?>(null)
+    val featured: StateFlow<List<PictureModel>?> =
         _featured.asStateFlow()
 
 
@@ -71,7 +71,7 @@ class PictureViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onNewPicturesList(pictures: PagingData<PicturesItem>) {
+    private suspend fun onNewPicturesList(pictures: PagingData<PictureModel>) {
         _pictures.emit(pictures)
     }
 
@@ -84,7 +84,7 @@ class PictureViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onNewFeaturedList(featured: List<PicturesItem>) {
+    private suspend fun onNewFeaturedList(featured: List<PictureModel>) {
         if (this.featured.value == null){
             _featured.emit(featured)
         }else if(this.featured.value != featured && featured.size == 10) {
@@ -94,7 +94,7 @@ class PictureViewModel @Inject constructor(
     }
 
 
-    fun updateFavorites(item: PicturesItem) {
+    fun updateFavorites(item: PictureModel) {
         viewModelScope.launch(mainDispatcher) {
             updateFavorite(item)
         }

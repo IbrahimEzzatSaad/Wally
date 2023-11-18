@@ -3,14 +3,14 @@ package com.example.wally.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.wally.data.api.PicturesApi
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 
 class CategoryPagingSource(
     private val picturesApi: PicturesApi,
     private val id : String
-) : PagingSource<Int, PicturesItem>() {
+) : PagingSource<Int, PictureModel>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PicturesItem> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PictureModel> {
         try {
             // Start by defining the page key and the page size
             val currentPage = params.key ?: 1
@@ -43,7 +43,7 @@ class CategoryPagingSource(
     /**
      * The refresh key is used for subsequent calls to PagingSource.Load after the initial load.
      */
-    override fun getRefreshKey(state: PagingState<Int, PicturesItem>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, PictureModel>): Int? {
         // We need to get the previous key (or next key if previous is null) of the page
         // that was closest to the most recently accessed index.
         // Anchor position is the most recently accessed index.

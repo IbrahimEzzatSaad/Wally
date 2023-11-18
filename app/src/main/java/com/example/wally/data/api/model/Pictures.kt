@@ -1,5 +1,5 @@
 package com.example.wally.data.api.model
 
 
-class ApiPictures : ArrayList<PicturesItem>()
+class ApiPictures : ArrayList<PictureModel>()
 

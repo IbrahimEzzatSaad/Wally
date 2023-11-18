@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.wally.data.api.model.PicturesItem
-import com.example.wally.ui.OnFeaturedItemClicked
+import com.example.wally.data.api.model.PictureModel
+import com.example.wally.utils.OnFeaturedItemClicked
 
 @Composable
-fun Featured(featured: List<PicturesItem>, onFeaturedClicked: OnFeaturedItemClicked) {
+fun Featured(featured: List<PictureModel>, onFeaturedClicked: OnFeaturedItemClicked) {
 
     Column(
         modifier = Modifier

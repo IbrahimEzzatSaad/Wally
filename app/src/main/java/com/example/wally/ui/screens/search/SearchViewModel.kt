@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 import com.example.wally.domain.usecases.QuerySearch
 import com.example.wally.domain.usecases.UpdateFavorite
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,9 +39,8 @@ class SearchViewModel @Inject constructor(
 
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val search: Flow<PagingData<PicturesItem>> =
-        searchQuery.debounce(2000L) // Wait for 2 seconds of inactivity
-            .distinctUntilChanged()
+    val search: Flow<PagingData<PictureModel>> =
+        searchQuery.debounce(2000L)
             .flatMapLatest { query ->
                 Log.i("Tracking: ", "??"+ query)
 

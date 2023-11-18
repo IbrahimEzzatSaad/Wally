@@ -2,7 +2,7 @@ package com.example.wally.ui.screens.favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 import com.example.wally.domain.usecases.GetFavorite
 import com.example.wally.domain.usecases.UpdateFavorite
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +21,8 @@ class FavoriteViewModel @Inject constructor(
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
-    private val _favorite = MutableStateFlow<List<PicturesItem>?>(null)
-    val favorite: StateFlow<List<PicturesItem>?> =
+    private val _favorite = MutableStateFlow<List<PictureModel>?>(null)
+    val favorite: StateFlow<List<PictureModel>?> =
         _favorite.asStateFlow()
 
 
@@ -34,7 +34,7 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    fun updateFavorites(item : PicturesItem){
+    fun updateFavorites(item : PictureModel){
         viewModelScope.launch(mainDispatcher) {
             updateFavorite(item)
         }

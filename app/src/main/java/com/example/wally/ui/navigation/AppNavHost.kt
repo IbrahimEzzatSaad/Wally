@@ -13,8 +13,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.wally.data.api.model.PicturesItem
-import com.example.wally.ui.component.ConnectivityStatus
+import com.example.wally.data.api.model.PictureModel
+import com.example.wally.ui.navigation.PictureScreen.featuredKey
+import com.example.wally.ui.navigation.PictureScreen.pictureKey
 import com.example.wally.ui.screens.categories.CategoriesScreen
 import com.example.wally.ui.screens.categorylist.CategoryListScreen
 import com.example.wally.ui.screens.categorylist.CategoryViewModel

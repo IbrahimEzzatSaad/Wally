@@ -3,7 +3,7 @@ package com.example.wally.data.cache.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 
 @Entity(tableName = "cached_favorite_pictures")
 data class CachedFavoritePicture (
@@ -13,7 +13,7 @@ data class CachedFavoritePicture (
     ): CachedPictureBase() {
 
     companion object {
-        fun fromDomain(picture: PicturesItem): CachedFavoritePicture {
+        fun fromDomain(picture: PictureModel): CachedFavoritePicture {
             return CachedFavoritePicture().apply {
                 id = picture.id
                 description = picture.description

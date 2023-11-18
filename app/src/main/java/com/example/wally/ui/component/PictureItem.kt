@@ -30,15 +30,15 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.example.wally.Duration
 import com.example.wally.R
-import com.example.wally.data.api.model.PicturesItem
-import com.example.wally.ui.OnFavoriteClicked
-import com.example.wally.ui.OnPictureItemClicked
+import com.example.wally.data.api.model.PictureModel
+import com.example.wally.utils.OnFavoriteClicked
+import com.example.wally.utils.OnPictureItemClicked
 import com.exyte.animatednavbar.items.dropletbutton.DropletButton
 import com.example.wally.ui.theme.Tulip
 
 @Composable
 fun PictureItem(
-    item: PicturesItem,
+    item: PictureModel,
     onItemClicked: OnPictureItemClicked,
     onFavoriteClicked: OnFavoriteClicked,
     modifier: Modifier = Modifier,

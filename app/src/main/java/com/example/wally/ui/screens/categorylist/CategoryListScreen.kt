@@ -29,8 +29,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.example.wally.data.api.model.PicturesItem
-import com.example.wally.ui.OnPictureItemClicked
+import com.example.wally.data.api.model.PictureModel
+import com.example.wally.utils.OnPictureItemClicked
 import com.example.wally.ui.component.PictureItem
 import com.example.wally.ui.component.RefreshButton
 import com.example.wally.ui.component.StaggeredGrid
@@ -44,7 +44,7 @@ fun CategoryListScreen(
     onPictureItemClicked: OnPictureItemClicked,
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
-    val categoryList: LazyPagingItems<PicturesItem> = viewModel.category.collectAsLazyPagingItems()
+    val categoryList: LazyPagingItems<PictureModel> = viewModel.category.collectAsLazyPagingItems()
     val id = viewModel.id.collectAsState().value
     val category = categories.find { it.slug == id }
     val isLoading by viewModel.isLoading.collectAsState()

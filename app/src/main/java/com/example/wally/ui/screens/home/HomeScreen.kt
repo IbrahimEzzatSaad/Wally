@@ -31,9 +31,9 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.example.wally.data.api.model.PicturesItem
-import com.example.wally.ui.OnFeaturedItemClicked
-import com.example.wally.ui.OnPictureItemClicked
+import com.example.wally.data.api.model.PictureModel
+import com.example.wally.utils.OnFeaturedItemClicked
+import com.example.wally.utils.OnPictureItemClicked
 import com.example.wally.ui.component.Featured
 import com.example.wally.ui.component.NoInternet
 import com.example.wally.ui.component.PictureItem
@@ -54,7 +54,7 @@ fun HomeScreen(
 ) {
     val featured by viewModel.featured.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    val pictures: LazyPagingItems<PicturesItem> = viewModel.pictures.collectAsLazyPagingItems()
+    val pictures: LazyPagingItems<PictureModel> = viewModel.pictures.collectAsLazyPagingItems()
     val state = rememberPullRefreshState(isLoading, {
         viewModel.retry()
         pictures.retry()

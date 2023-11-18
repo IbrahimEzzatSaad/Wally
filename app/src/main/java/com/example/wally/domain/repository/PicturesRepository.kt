@@ -1,26 +1,26 @@
 package com.example.wally.domain.repository
 
 import androidx.paging.PagingData
-import com.example.wally.data.api.model.PicturesItem
+import com.example.wally.data.api.model.PictureModel
 import kotlinx.coroutines.flow.Flow
 
 interface PicturesRepository {
 
-    suspend fun requestPictures(): Flow<PagingData<PicturesItem>>
+    suspend fun requestPictures(): Flow<PagingData<PictureModel>>
 
-    suspend fun requestFeatured(): List<PicturesItem>
+    suspend fun requestFeatured(): List<PictureModel>
 
-    suspend fun storeFeatured(pictures: List<PicturesItem>)
+    suspend fun storeFeatured(pictures: List<PictureModel>)
 
-    suspend fun getFeatured(): Flow<List<PicturesItem>>
+    suspend fun getFeatured(): Flow<List<PictureModel>>
 
-    suspend fun getFavorite(): List<PicturesItem>
+    suspend fun getFavorite(): List<PictureModel>
 
-    suspend fun getCategoryList(id: String): Flow<PagingData<PicturesItem>>
+    suspend fun getCategoryList(id: String): Flow<PagingData<PictureModel>>
 
-    suspend fun getSearch(query: String): Flow<PagingData<PicturesItem>>
+    suspend fun getSearch(query: String): Flow<PagingData<PictureModel>>
 
-    suspend fun updateFavorite(item: PicturesItem)
+    suspend fun updateFavorite(item: PictureModel)
 
 
 }
