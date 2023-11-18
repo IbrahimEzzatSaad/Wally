@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.SplashScreenApp" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowTranslucentStatus">true</item>
 
     </style>
 
@@ -9,6 +9,13 @@
         <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
 
-    <style name="Theme.Wally" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Wally">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>
 
