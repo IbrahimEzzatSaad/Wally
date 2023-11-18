@@ -61,7 +61,7 @@ class PicturesRepositoryImp @Inject constructor(
 
     override suspend fun getFeatured(): Flow<List<PictureModel>> {
         return cache.getFeatured()
-            .distinctUntilChanged() // ensures only events with new information get to the subscriber.
+            .distinctUntilChanged()
             .map { picturesList ->
                 picturesList.map { it.toDomain().copy(favorite = if (cache.getFavoriteById(it.id) == null) false else true) }
             }

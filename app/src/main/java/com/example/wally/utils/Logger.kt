@@ -1,4 +1,4 @@
-package com.organization.nytimes.utils
+package com.example.wally.utils
 
 import timber.log.Timber
 
@@ -8,7 +8,7 @@ object Logger {
         Timber.DebugTree()
     }
 
-    fun init() {
+    init {
         Timber.plant(logger)
     }
 

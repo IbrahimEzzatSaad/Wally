@@ -9,6 +9,7 @@ import com.example.wally.domain.usecases.FetchFeatured
 import com.example.wally.domain.usecases.GetFeatured
 import com.example.wally.domain.usecases.GetPictures
 import com.example.wally.domain.usecases.UpdateFavorite
+import com.example.wally.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +54,7 @@ class HomeViewModel @Inject constructor(
                 subscribeToPicturesUpdates()
 
             } catch (e: IOException) {
+                e.message?.let { Logger.e(t = e, message = it) }
                 onNewUiState(false)
                 subscribeToFeaturedUpdates()
                 subscribeToPicturesUpdates()

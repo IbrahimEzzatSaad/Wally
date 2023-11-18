@@ -1,6 +1,6 @@
 package com.example.wally.data.api.interceptors
 
-import com.organization.nytimes.utils.Logger
+import com.example.wally.utils.Logger
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Inject
 
