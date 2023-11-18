@@ -37,13 +37,14 @@ import kotlinx.coroutines.delay
 @ExperimentalAnimationApi
 @ExperimentalCoroutinesApi
 @Composable
-fun ConnectivityStatus() {
+fun ConnectivityStatus(topPadding: Float) {
     val connection by connectivityState()
     val isConnected = connection === ConnectionState.Available
 
     var visibility by remember { mutableStateOf(false) }
 
     AnimatedVisibility(
+        modifier = if (visibility) Modifier.padding(top = topPadding.dp) else Modifier,
         visible = visibility,
         enter = expandVertically(),
         exit = shrinkVertically()
