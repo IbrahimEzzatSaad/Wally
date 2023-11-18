@@ -1,6 +1,5 @@
 package com.example.wally.ui.screens.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -18,13 +17,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.debounce
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,26 +37,21 @@ class SearchViewModel @Inject constructor(
     val search: Flow<PagingData<PictureModel>> =
         searchQuery.debounce(2000L)
             .flatMapLatest { query ->
-                Log.i("Tracking: ", "??"+ query)
+                querySearch(query)
+            }.flowOn(mainDispatcher)
+            .cachedIn(viewModelScope)
+    
 
-                if (query.isNotEmpty()) {
-                    querySearch(query)
-                } else {
-                    flowOf(PagingData.empty()) // Empty result for an empty query
-                }
-            }
-            .flowOn(mainDispatcher)
-
-
-    fun search(query: String){
+    fun search(query: String) {
         viewModelScope.launch(mainDispatcher) {
-            _searchQuery.emit(query)
-
+            if (query != searchQuery.value && query.isNotEmpty()) {
+                _searchQuery.emit(query)
+            }
         }
     }
 
 
-    fun updateFavorites(item : PicturesItem){
+    fun updateFavorites(item: PictureModel) {
         viewModelScope.launch(mainDispatcher) {
             updateFavorite(item)
         }
