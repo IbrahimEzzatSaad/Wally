@@ -2,7 +2,6 @@ package com.example.wally.data.api.model
 
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 
 data class PictureModel (

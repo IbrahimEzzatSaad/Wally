@@ -38,8 +38,6 @@ object SplashScreen : AppDestinations {
 object CategoryListScreen : AppDestinations{
     override val title = "CategoryListScreen"
     override val route = "categorylist"
-    const val categoryId = "category_Id"
-
 }
 
 object PictureScreen : AppDestinations {

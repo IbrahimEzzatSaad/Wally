@@ -24,7 +24,6 @@ class SearchPagingSource(
             // Extract the data from the API response
             val items = response.pictures.distinct()
 
-            Log.i("searchItems: ", items.toString())
 
             // Calculate the next page key (if available)
             val nextPage = if (items.isEmpty()) {
