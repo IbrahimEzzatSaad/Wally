@@ -115,7 +115,7 @@ private fun MyApp() {
         topBar = {
             if (currentScreen != SplashScreen && currentScreen != PictureScreen) {
                 CenterAlignedTopAppBar(
-                    modifier = Modifier.shadow(15.dp),
+                    modifier =  if (!isClosed) Modifier.shadow(15.dp) else Modifier,
                     title = {
                         Icon(
                             modifier = Modifier
