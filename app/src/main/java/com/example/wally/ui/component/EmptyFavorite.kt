@@ -23,14 +23,14 @@ fun EmptyFavorite(modifier: Modifier) {
         Text(
             text = "Oops! No Favorites to display!",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(3.dp),
-            color = Color.White.copy(alpha = 0.9f)
+            modifier = Modifier.padding(top = 50.dp),
+            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
         )
         Text(
             text = "It looks like you didn't add any to favorites.",
             style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.padding(3.dp),
-            color = Color.White.copy(alpha = 0.7f)
+            modifier = Modifier.padding(top = 3.dp),
+            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
         )
 
         Box {

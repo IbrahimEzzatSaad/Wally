@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -47,6 +48,7 @@ fun Featured(featured: List<PictureModel>, onFeaturedClicked: OnFeaturedItemClic
 
         Text(
             text = "Featured",
+            modifier = Modifier.padding(top = 10.dp),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onPrimary
         )
@@ -60,15 +62,17 @@ fun Featured(featured: List<PictureModel>, onFeaturedClicked: OnFeaturedItemClic
         Card(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
-                .clickable { onFeaturedClicked(featured, 0) }
+                .clickable { onFeaturedClicked(featured[0]) }
                 .height(200.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(3.dp)
+            ,
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(featured[0].color.toColorInt())
             ),
             elevation = CardDefaults.cardElevation(
-                defaultElevation = 8.dp
+                defaultElevation = 3.dp
             )
         ) {
             Image(
@@ -84,12 +88,10 @@ fun Featured(featured: List<PictureModel>, onFeaturedClicked: OnFeaturedItemClic
                     .fillMaxSize(),
             )
         }
-
-
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(10.dp)
+                .height(5.dp)
         )
 
         Row(
@@ -100,12 +102,12 @@ fun Featured(featured: List<PictureModel>, onFeaturedClicked: OnFeaturedItemClic
             if (featured.size > 4) {
                 FeaturedImage(
                     rememberAsyncImagePainter(featured[1].urls.regular),
-                    modifier = Modifier.clickable { onFeaturedClicked(featured, 1) },
+                    modifier = Modifier.clickable { onFeaturedClicked(featured[1]) },
                     color = featured[1].color
                 )
                 FeaturedImage(
                     rememberAsyncImagePainter(featured[2].urls.regular),
-                    modifier = Modifier.clickable { onFeaturedClicked(featured, 2) }.padding(start = 5.dp , end= 5.dp),
+                    modifier = Modifier.clickable { onFeaturedClicked(featured[2]) }.padding(start = 5.dp , end= 5.dp),
                     color = featured[2].color
                 )
 
@@ -113,7 +115,10 @@ fun Featured(featured: List<PictureModel>, onFeaturedClicked: OnFeaturedItemClic
                     modifier = Modifier
                         .height(80.dp)
                         .width(120.dp)
-                        .clip(RoundedCornerShape(10.dp)),
+                        .padding(2.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .shadow(2.dp)
+                        .clickable { onFeaturedClicked(featured[4]) },
                     contentAlignment = Alignment.Center
                 ) {
 
@@ -130,7 +135,7 @@ fun Featured(featured: List<PictureModel>, onFeaturedClicked: OnFeaturedItemClic
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "+4", style = MaterialTheme.typography.titleMedium,
+                                text = "+7", style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 24.sp
                             )
@@ -149,13 +154,15 @@ fun FeaturedImage(painter: Painter, color: String, modifier: Modifier) {
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .height(80.dp)
-            .width(120.dp),
+            .width(120.dp)
+            .padding(2.dp)
+        ,
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(color.toColorInt())
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
+            defaultElevation = 3.dp
         )
     ) {
         Image(

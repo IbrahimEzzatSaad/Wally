@@ -137,7 +137,7 @@ private fun MyApp() {
                         .padding(horizontal = 12.dp, vertical = 6.dp)
                         .height(60.dp),
                     selectedIndex = selectedIndex,
-                    ballColor = White,
+                    ballColor = MaterialTheme.colorScheme.onPrimary,
                     barColor = BluishGray,
                     cornerRadius = shapeCornerRadius(25.dp),
                     ballAnimation = Teleport(tween(Duration, easing = LinearOutSlowInEasing)),

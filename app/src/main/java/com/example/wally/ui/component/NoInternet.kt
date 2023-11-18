@@ -14,28 +14,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.wally.R
-import com.example.wally.ui.OnRetryClicked
+import com.example.wally.utils.OnRetryClicked
 import com.example.wally.ui.theme.VioletsBlue
 
 @Composable
-fun NoInternet(modifier: Modifier, retry: OnRetryClicked, enabled: Boolean) {
+fun NoInternet( retry: OnRetryClicked, enabled: Boolean) {
 
-    Column(modifier = modifier) {
+    Column() {
         Text(
             text = "Not Internet Connection",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(3.dp),
-            color = Color.White.copy(alpha = 0.9f)
+            modifier = Modifier.padding(top = 50.dp),
+            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
         )
         Text(
             text = "It looks like you're not connected to the internet.",
             style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.padding(3.dp),
-            color = Color.White.copy(alpha = 0.7f)
+            modifier = Modifier.padding(top = 3.dp),
+            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
         )
 
         Box {
@@ -53,7 +53,8 @@ fun NoInternet(modifier: Modifier, retry: OnRetryClicked, enabled: Boolean) {
             onClick = { retry() }, shape = RoundedCornerShape(20),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(10.dp)
+                .shadow(10.dp),
             enabled = !enabled,
             colors = ButtonDefaults.buttonColors(containerColor = VioletsBlue)
         ) {

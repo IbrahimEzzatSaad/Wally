@@ -7,16 +7,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.wally.ui.OnPictureItemClicked
+import com.example.wally.utils.OnPictureItemClicked
 import com.example.wally.ui.component.EmptyFavorite
 import com.example.wally.ui.component.PictureItem
 import com.example.wally.ui.component.StaggeredGrid
@@ -30,24 +28,22 @@ fun FavoriteScreen(
 ) {
 
 
-    Surface(
-        modifier = modifier
-            .fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
         val favorite by viewModel.favorite.collectAsState()
 
         favorite?.let {
-            if (it.isEmpty()) {
-                EmptyFavorite(Modifier)
-            } else
-                StaggeredGrid {
+            StaggeredGrid(modifier){
+                if (it.isEmpty()) {
+                    item(span = StaggeredGridItemSpan.FullLine) {
+
+                        EmptyFavorite(Modifier)
+                    }
+                } else {
                     item(span = StaggeredGridItemSpan.FullLine) {
                         Text(
                             text = "Favorites",
                             style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier,
-                            color = Color.White
+                            modifier = Modifier.padding(top = 50.dp),
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
 
@@ -56,7 +52,7 @@ fun FavoriteScreen(
                             text = "You've marked all of these as favorite!",
                             style = MaterialTheme.typography.titleSmall,
                             modifier = Modifier,
-                            color = Color.White.copy(alpha = 0.7f)
+                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
                         )
                     }
 
@@ -79,8 +75,9 @@ fun FavoriteScreen(
                         Spacer(modifier = Modifier.size(65.dp))
                     }
                 }
-        }
 
+
+        }
     }
 
 }

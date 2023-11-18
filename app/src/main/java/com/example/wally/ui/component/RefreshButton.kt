@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +18,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.wally.R
-import com.example.wally.ui.theme.BluishGray
 
 @Composable
 fun RefreshButton(onRetry: () -> Unit){
@@ -34,7 +34,7 @@ fun RefreshButton(onRetry: () -> Unit){
                 .shadow(5.dp, CircleShape),
             onClick = { onRetry() },
             shape = CircleShape,
-            colors = IconButtonDefaults.filledIconButtonColors(containerColor = BluishGray)
+            colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colorScheme.onSecondary)
         ) {
             Icon(
                 modifier = Modifier

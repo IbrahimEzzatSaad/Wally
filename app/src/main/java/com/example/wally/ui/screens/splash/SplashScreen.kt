@@ -11,8 +11,6 @@ import androidx.compose.ui.res.painterResource
 import com.example.wally.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Surface
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +24,7 @@ import kotlinx.coroutines.delay
 typealias OnTimeEnd = () -> Unit
 
 @Composable
-fun SplashScreen(modifier: Modifier = Modifier, onTimeEnd : OnTimeEnd) {
+fun SplashScreen(modifier: Modifier = Modifier, onTimeEnd: OnTimeEnd) {
 
     var animationFinished by remember { mutableStateOf(false) }
 
@@ -47,22 +45,20 @@ fun SplashScreen(modifier: Modifier = Modifier, onTimeEnd : OnTimeEnd) {
     }
 
 
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentDescription = "App Icon",
-                    modifier = Modifier.size(200.dp).graphicsLayer(alpha = alpha)
-                )
-            }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = "App Icon",
+                modifier = Modifier
+                    .size(200.dp)
+                    .graphicsLayer(alpha = alpha)
+            )
         }
     }
+
 }
