@@ -5,9 +5,11 @@ import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,15 +18,17 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -35,16 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.wally.ui.component.BackButton
+import com.example.wally.ui.component.ConnectivityStatus
 import com.example.wally.ui.navigation.SplashScreen
 import com.example.wally.ui.navigation.AppNavHost
-import com.example.wally.ui.navigation.CategoriesScreen
-import com.example.wally.ui.navigation.FavoriteScreen
-import com.example.wally.ui.navigation.HomeScreen
-import com.example.wally.ui.navigation.SearchScreen
+import com.example.wally.ui.navigation.PictureScreen
 import com.example.wally.ui.navigation.appScreens
 import com.example.wally.ui.navigation.dropletButtons
 import com.example.wally.ui.theme.BluishGray
-import com.example.wally.ui.theme.DarkJungle
 import com.example.wally.ui.theme.WallyTheme
 import com.exyte.animatednavbar.AnimatedNavigationBar
 import com.exyte.animatednavbar.animation.balltrajectory.Teleport
@@ -58,6 +60,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             WallyTheme {
                 // A surface container using the 'background' color from the theme
@@ -87,8 +90,21 @@ private fun MyApp() {
     val indexCurrentScreen =
         dropletButtons.indexOfFirst { it.destination.route == currentScreen.route }
     var selectedIndex = indexCurrentScreen
-
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val isClosed = scrollBehavior.state.heightOffset == scrollBehavior.state.heightOffsetLimit
+
+    if (currentScreen == PictureScreen && !isClosed) {
+        val heightOffset = remember { Animatable(scrollBehavior.state.heightOffset) }
+        LaunchedEffect(scrollBehavior.state.heightOffsetLimit) {
+            heightOffset.animateTo(
+                scrollBehavior.state.heightOffsetLimit,
+                animationSpec = tween(100)
+            )
+            scrollBehavior.state.heightOffset = heightOffset.value
+
+        }
+
+    }
 
     Scaffold(
         modifier = Modifier
@@ -97,9 +113,9 @@ private fun MyApp() {
                 testTagsAsResourceId = true
             },
         topBar = {
-            if (currentScreen != SplashScreen) {
+            if (currentScreen != SplashScreen && currentScreen != PictureScreen) {
                 CenterAlignedTopAppBar(
-
+                    modifier = Modifier.shadow(15.dp),
                     title = {
                         Icon(
                             modifier = Modifier
@@ -109,22 +125,18 @@ private fun MyApp() {
                             contentDescription = "Back",
                             tint = Color.Unspecified
                         )
+
                     },
                     navigationIcon = {
                         if (indexCurrentScreen == -1) {
-                            IconButton(modifier = Modifier.wrapContentWidth(),
-                                onClick = { navController.popBackStack() }) {
-
-                                Icon(
-                                    modifier = Modifier.fillMaxHeight(),
-                                    painter = painterResource(id = R.drawable.back_button),
-                                    contentDescription = "Back"
-                                )
+                            BackButton {
+                                navController.popBackStack()
                             }
                         }
                     },
                     colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = DarkJungle
+                        containerColor = if (isClosed) Color.Transparent else
+                            MaterialTheme.colorScheme.surface
                     ),
                     scrollBehavior = scrollBehavior
                 )
@@ -154,29 +166,10 @@ private fun MyApp() {
                             modifier = Modifier.fillMaxSize(),
                             isSelected = selectedIndex == index,
                             onClick = {
-                                when (it.destination) {
-                                    FavoriteScreen -> {
-                                        if (currentScreen != FavoriteScreen) {
-                                            navController.navigate(route = FavoriteScreen.route)
-                                        }
-                                    }
-
-                                    HomeScreen -> {
-                                        if (currentScreen != HomeScreen) {
-                                            navController.navigate(route = HomeScreen.route)
-                                        }
-                                    }
-
-                                    SearchScreen -> {
-                                        if (currentScreen != SearchScreen) {
-                                            navController.navigate(route = SearchScreen.route)
-                                        }
-                                    }
-
-                                    CategoriesScreen -> {
-                                        if (currentScreen != CategoriesScreen) {
-                                            navController.navigate(route = CategoriesScreen.route)
-                                        }
+                                if (currentScreen != it.destination) {
+                                    navController.popBackStack(it.destination.route, true)
+                                    navController.navigate(route = it.destination.route) {
+                                        launchSingleTop = true
                                     }
                                 }
                                 selectedIndex = index
@@ -190,15 +183,18 @@ private fun MyApp() {
                 }
             }
         }, content = { innerPadding ->
+            Column(Modifier.padding(top = if (currentScreen != PictureScreen && !isClosed) innerPadding.calculateTopPadding() else 0.dp)) {
+                ConnectivityStatus(if (isClosed) innerPadding.calculateTopPadding().value else 0F)
 
-            AppNavHost(
-                navController = navController,
-                modifier = if (currentScreen != SplashScreen) Modifier.padding(
-                    top = innerPadding.calculateTopPadding()
-                ) else Modifier
-            )
+                AppNavHost(
+                    navController = navController,
+                    modifier = Modifier.padding(
+                        start = 15.dp,
+                        end = 15.dp
+                    ),
+                )
+            }
         })
-
 }
 
 
