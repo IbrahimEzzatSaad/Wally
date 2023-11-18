@@ -28,7 +28,7 @@ fun NoInternet( retry: OnRetryClicked, enabled: Boolean) {
         Text(
             text = "Not Internet Connection",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(top = 50.dp),
+            modifier = Modifier.padding(top = 30.dp),
             color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
         )
         Text(
