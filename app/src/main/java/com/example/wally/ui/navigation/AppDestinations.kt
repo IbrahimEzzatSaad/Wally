@@ -43,9 +43,11 @@ object CategoryListScreen : AppDestinations{
 }
 
 object PictureScreen : AppDestinations {
-    override val title = "Details"
-    override val route = "picture"
-    const val pictureKey = "picture_argument"
+    override val title = "Picture"
+    override val route = "picture/{picture}/{featured}"
+    const val pictureKey = "picture"
+    const val featuredKey = "featured"
+
 }
 
 
