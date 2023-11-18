@@ -42,20 +42,20 @@ fun PictureItem(
     onItemClicked: OnPictureItemClicked,
     onFavoriteClicked: OnFavoriteClicked,
     modifier: Modifier = Modifier,
-    height: Int,
-
-) {
+    height: Int) {
     Card(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
             .clickable { onItemClicked(item) }
-            .height(height.dp),
+            .height(height.dp)
+            .padding(5.dp)
+        ,
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(item.color.toColorInt())
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
+            defaultElevation = 3.dp
         )
     ) {
         var favorite by rememberSaveable { mutableStateOf(item.favorite) }
