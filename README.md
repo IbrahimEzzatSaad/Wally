@@ -4,7 +4,7 @@ https://github.com/IbrahimEzzatSaad/Wally/assets/43017172/5238ffd2-c9eb-48f5-aa1
 # Wally 
 
 Wallpaper finder and downloader app Demonstrate the Jetpack Compose UI
-using [Unsplash](https://unsplash.com/developers) API *Made with 
+using [Unsplash](https://unsplash.com/developers) API *Made 
 by [Ibrahim Ezzat](https://github.com/IbrahimEzzatSaad)*
 
 
