@@ -41,7 +41,7 @@ class RoomCache @Inject constructor(
 
 
 
-    override suspend fun getFavorite(): List<CachedFavoritePicture> = favoriteDao.getFavorite()
+    override suspend fun getFavorite(): Flow<List<CachedFavoritePicture>> = favoriteDao.getFavorite()
 
     override suspend fun insertFavorite(picture: CachedFavoritePicture) = favoriteDao.insertFavorite(picture)
 

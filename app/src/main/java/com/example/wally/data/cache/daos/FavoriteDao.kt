@@ -14,7 +14,7 @@ abstract class FavoriteDao {
 
     @Transaction
     @Query("SELECT * FROM cached_favorite_pictures")
-    abstract suspend fun getFavorite(): List<CachedFavoritePicture>
+    abstract fun getFavorite(): Flow<List<CachedFavoritePicture>>
 
     @Query("DELETE FROM cached_favorite_pictures WHERE id = :id")
     abstract suspend fun deleteFavorite(id: String)

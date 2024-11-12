@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import com.example.wally.ui.component.AppHeader
 import com.example.wally.utils.OnCategoryClicked
 import com.example.wally.ui.model.Category
 import com.example.wally.ui.model.categories
@@ -43,10 +45,12 @@ fun CategoriesScreen(
         modifier = modifier
             .verticalScroll(rememberScrollState())
     ) {
+        AppHeader(navigationIcon = false)
+
         categories.forEach {
             Category(it, onCategoryClicked)
         }
-        Spacer(modifier = Modifier.size(65.dp))
+        Spacer(modifier = Modifier.size(100.dp))
     }
 
 

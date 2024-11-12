@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,7 +28,11 @@ fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-
+    val onBack = {
+        if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+            navController.popBackStack()
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -95,6 +100,7 @@ fun AppNavHost(
             CategoryListScreen(
                 modifier = modifier,
                 viewModel = viewModel,
+                onBack = onBack,
                 onPictureItemClicked = { picture ->
                     navController.navigateToPicture(picture)
                 })

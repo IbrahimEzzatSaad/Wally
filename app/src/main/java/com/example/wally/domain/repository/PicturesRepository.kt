@@ -14,7 +14,7 @@ interface PicturesRepository {
 
     suspend fun getFeatured(): Flow<List<PictureModel>>
 
-    suspend fun getFavorite(): List<PictureModel>
+    suspend fun getFavorite(): Flow<List<PictureModel>>
 
     suspend fun getCategoryList(id: String): Flow<PagingData<PictureModel>>
 

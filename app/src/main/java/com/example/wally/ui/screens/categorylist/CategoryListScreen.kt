@@ -26,6 +26,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.example.wally.data.api.model.PictureModel
+import com.example.wally.ui.component.AppHeader
 import com.example.wally.utils.OnPictureItemClicked
 import com.example.wally.ui.component.PictureItem
 import com.example.wally.ui.component.RefreshButton
@@ -38,6 +39,7 @@ import com.example.wally.ui.theme.VioletsBlue
 fun CategoryListScreen(
     modifier: Modifier = Modifier,
     onPictureItemClicked: OnPictureItemClicked,
+    onBack: () -> Unit,
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
     val categoryList: LazyPagingItems<PictureModel> = viewModel.category.collectAsLazyPagingItems()
@@ -48,6 +50,7 @@ fun CategoryListScreen(
         viewModel.loadingUpdate()
         categoryList.refresh()
     })
+    val favorites by viewModel.favorites.collectAsState()
 
     Box(
         modifier = modifier
@@ -58,10 +61,14 @@ fun CategoryListScreen(
 
         StaggeredGrid {
             item(span = StaggeredGridItemSpan.FullLine) {
+                AppHeader(navigationIcon = true, onBack = onBack)
+            }
+
+            item(span = StaggeredGridItemSpan.FullLine) {
                 Text(
                     text = category?.title ?: "Category",
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(top = 50.dp),
+                    modifier = Modifier.padding(top = 10.dp),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
@@ -70,7 +77,7 @@ fun CategoryListScreen(
                 Text(
                     text = category?.subTitle ?: "",
                     style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier,
+                    modifier = Modifier.padding(bottom = 20.dp),
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
                 )
             }
@@ -86,6 +93,7 @@ fun CategoryListScreen(
                         item = pictureItem,
                         onItemClicked = onPictureItemClicked,
                         height = (pictureItem.height / 12),
+                        isFavorite = favorites.contains(pictureItem.id),
                         onFavoriteClicked = { id ->
                             viewModel.updateFavorites(id)
                         }

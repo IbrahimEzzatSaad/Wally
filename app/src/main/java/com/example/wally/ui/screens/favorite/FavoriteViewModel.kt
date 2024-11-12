@@ -28,7 +28,7 @@ class FavoriteViewModel @Inject constructor(
 
     init{
         viewModelScope.launch(mainDispatcher) {
-            getFavorite().let{
+            getFavorite().collect {
                 _favorite.emit(it)
             }
         }

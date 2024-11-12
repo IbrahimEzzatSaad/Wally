@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.wally.data.api.model.PictureModel
 import com.example.wally.domain.usecases.GetCategoryList
+import com.example.wally.domain.usecases.GetFavorite
 import com.example.wally.domain.usecases.UpdateFavorite
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,8 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val getCategoryList: GetCategoryList,
-    private val mainDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val updateFavorite: UpdateFavorite
+    private val getFavorite: GetFavorite,
+    private val updateFavorite: UpdateFavorite,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
 
@@ -39,6 +41,16 @@ class CategoryViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _favorites = MutableStateFlow<List<String>>(emptyList())
+    val favorites: StateFlow<List<String>> = _favorites.asStateFlow()
+
+    init {
+        viewModelScope.launch(mainDispatcher) {
+            getFavorite().collect {
+                _favorites.emit(it.map { it.id })
+            }
+        }
+    }
 
     fun startSubscribe(id: String){
         viewModelScope.launch(mainDispatcher) {
@@ -48,6 +60,7 @@ class CategoryViewModel @Inject constructor(
             subscribeToCategoryUpdates(id)
         }
     }
+
     private fun subscribeToCategoryUpdates(id: String) {
         viewModelScope.launch(mainDispatcher) {
             getCategoryList(id).distinctUntilChanged().cachedIn(viewModelScope).collect {

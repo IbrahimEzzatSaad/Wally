@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -55,6 +56,7 @@ import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.items.dropletbutton.DropletButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -62,8 +64,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            WallyTheme {
-                // A surface container using the 'background' color from the theme
+            WallyTheme(
+                dynamicColor = false
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.surface
@@ -90,57 +93,16 @@ private fun MyApp() {
     val indexCurrentScreen =
         dropletButtons.indexOfFirst { it.destination.route == currentScreen.route }
     var selectedIndex = indexCurrentScreen
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val isClosed = scrollBehavior.state.heightOffset == scrollBehavior.state.heightOffsetLimit
 
-    if (currentScreen == PictureScreen && !isClosed) {
-        val heightOffset = remember { Animatable(scrollBehavior.state.heightOffset) }
-        LaunchedEffect(scrollBehavior.state.heightOffsetLimit) {
-            heightOffset.animateTo(
-                scrollBehavior.state.heightOffsetLimit,
-                animationSpec = tween(100)
-            )
-            scrollBehavior.state.heightOffset = heightOffset.value
 
-        }
-
-    }
 
     Scaffold(
         modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .semantics {
                 testTagsAsResourceId = true
             },
         topBar = {
-            if (currentScreen != SplashScreen && currentScreen != PictureScreen) {
-                CenterAlignedTopAppBar(
-                    modifier =  if (!isClosed) Modifier.shadow(15.dp) else Modifier,
-                    title = {
-                        Icon(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .wrapContentWidth(),
-                            painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "Back",
-                            tint = Color.Unspecified
-                        )
 
-                    },
-                    navigationIcon = {
-                        if (indexCurrentScreen == -1) {
-                            BackButton {
-                                navController.popBackStack()
-                            }
-                        }
-                    },
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = if (isClosed) Color.Transparent else
-                            MaterialTheme.colorScheme.surface
-                    ),
-                    scrollBehavior = scrollBehavior
-                )
-            }
         },
         bottomBar = {
             if (indexCurrentScreen != -1) {
@@ -183,8 +145,8 @@ private fun MyApp() {
                 }
             }
         }, content = { innerPadding ->
-            Column(Modifier.padding(top = if (currentScreen != PictureScreen && !isClosed) innerPadding.calculateTopPadding() else 0.dp)) {
-                ConnectivityStatus(if (isClosed) innerPadding.calculateTopPadding().value else 0F)
+            Column(Modifier.padding(top = if (currentScreen != PictureScreen ) innerPadding.calculateTopPadding() else 0.dp)) {
+                ConnectivityStatus( 0F)
 
                 AppNavHost(
                     navController = navController,

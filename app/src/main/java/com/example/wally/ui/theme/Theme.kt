@@ -26,10 +26,6 @@ private val DarkColorScheme = darkColorScheme(
     background = DarkJungle,
     primaryContainer = Gunmetal,
     onPrimaryContainer = Color.White
-
-
-
-
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -61,6 +57,7 @@ fun WallyTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

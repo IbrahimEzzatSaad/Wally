@@ -67,11 +67,12 @@ class PicturesRepositoryImp @Inject constructor(
             }
     }
 
-    override suspend fun getFavorite(): List<PictureModel> {
-        return cache.getFavorite()
-            .map {
-                it.toDomain(true)
-            }
+    override suspend fun getFavorite(): Flow<List<PictureModel>> {
+         return cache.getFavorite().distinctUntilChanged()
+             .map {
+             it.map { it.toDomain(true) }
+         }
+
     }
 
     override suspend fun getCategoryList(id: String): Flow<PagingData<PictureModel>> {

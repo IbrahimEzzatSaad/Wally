@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.wally.data.api.model.PictureModel
+import com.example.wally.domain.usecases.GetFavorite
 import com.example.wally.domain.usecases.QuerySearch
 import com.example.wally.domain.usecases.UpdateFavorite
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,12 +27,23 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val updateFavorite: UpdateFavorite,
     private val querySearch: QuerySearch,
+    private val getFavorite: GetFavorite,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
+    private val _favorites = MutableStateFlow<List<String>>(emptyList())
+    val favorites: StateFlow<List<String>> = _favorites.asStateFlow()
+
+    init {
+        viewModelScope.launch(mainDispatcher) {
+            getFavorite().collect {
+                _favorites.emit(it.map { it.id })
+            }
+        }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val search: Flow<PagingData<PictureModel>> =

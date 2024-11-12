@@ -29,7 +29,7 @@ interface Cache {
     fun deleteFeatured()
 
 
-    suspend fun getFavorite():List<CachedFavoritePicture>
+    suspend fun getFavorite(): Flow<List<CachedFavoritePicture>>
 
     suspend fun insertFavorite(picture: CachedFavoritePicture)
 

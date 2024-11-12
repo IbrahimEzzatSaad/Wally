@@ -28,6 +28,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.example.wally.R
+import com.example.wally.ui.component.AppHeader
 import com.example.wally.utils.OnPictureItemClicked
 import com.example.wally.ui.component.PictureItem
 import com.example.wally.ui.component.RefreshButton
@@ -45,6 +46,7 @@ fun SearchScreen(
     val searchQuery = viewModel.searchQuery.collectAsState().value
     val interactionSource = remember { MutableInteractionSource() }
     var hideKeyboard by remember { mutableStateOf(false) }
+    val favorites by viewModel.favorites.collectAsState()
 
     StaggeredGrid(modifier = modifier.clickable(
         interactionSource = interactionSource,
@@ -52,10 +54,14 @@ fun SearchScreen(
     ) { hideKeyboard = true }) {
 
         item(span = StaggeredGridItemSpan.FullLine) {
+            AppHeader(navigationIcon = false)
+        }
+
+        item(span = StaggeredGridItemSpan.FullLine) {
             Text(
                 text = "Search",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(top = 50.dp),
+                modifier = Modifier.padding(top = 10.dp),
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }
@@ -91,6 +97,7 @@ fun SearchScreen(
                         item = pictureItem,
                         onItemClicked = onPictureItemClicked,
                         height = (pictureItem.height / 12),
+                        isFavorite = favorites.contains(pictureItem.id),
                         onFavoriteClicked = { id ->
                             viewModel.updateFavorites(id)
                             hideKeyboard = true

@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.wally.data.api.model.PictureModel
 import com.example.wally.domain.usecases.FetchFeatured
+import com.example.wally.domain.usecases.GetFavorite
 import com.example.wally.domain.usecases.GetFeatured
 import com.example.wally.domain.usecases.GetPictures
 import com.example.wally.domain.usecases.UpdateFavorite
@@ -27,6 +28,7 @@ class HomeViewModel @Inject constructor(
     private val getFeatured: GetFeatured,
     private val fetchFeatured: FetchFeatured,
     private val updateFavorite: UpdateFavorite,
+    private val getFavorite: GetFavorite,
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
@@ -40,6 +42,8 @@ class HomeViewModel @Inject constructor(
     val featured: StateFlow<List<PictureModel>?> =
         _featured.asStateFlow()
 
+    private val _favorites = MutableStateFlow<List<String>>(emptyList())
+    val favorites: StateFlow<List<String>> = _favorites.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -52,7 +56,9 @@ class HomeViewModel @Inject constructor(
                 fetchFeatured()
                 subscribeToFeaturedUpdates()
                 subscribeToPicturesUpdates()
-
+                getFavorite().collect {
+                    _favorites.emit(it.map { it.id })
+                }
             } catch (e: IOException) {
                 e.message?.let { Logger.e(t = e, message = it) }
                 onNewUiState(false)

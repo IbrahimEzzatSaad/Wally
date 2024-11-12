@@ -24,6 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.example.wally.data.api.model.PictureModel
+import com.example.wally.ui.component.AppHeader
 import com.example.wally.utils.OnFeaturedItemClicked
 import com.example.wally.utils.OnPictureItemClicked
 import com.example.wally.ui.component.Featured
@@ -51,6 +52,7 @@ fun HomeScreen(
         viewModel.retry()
         pictures.retry()
     })
+    val favorites by viewModel.favorites.collectAsState()
 
 
 
@@ -76,6 +78,10 @@ fun HomeScreen(
 
                 } else {
                     item(span = StaggeredGridItemSpan.FullLine) {
+                        AppHeader(navigationIcon = false)
+                    }
+
+                    item(span = StaggeredGridItemSpan.FullLine) {
                         Featured(it, onFeaturedItemClicked)
                     }
 
@@ -88,9 +94,9 @@ fun HomeScreen(
                         )
                     }
 
-                    items(pictures.itemCount,
-                        key = pictures.itemKey { it.id },
-                        contentType = pictures.itemContentType { it }) { index ->
+                    items(
+                        count = pictures.itemCount,
+                        key = pictures.itemKey { it.id }) { index ->
                         pictures[index]?.let { pictureItem ->
                             PictureItem(
                                 modifier = Modifier
@@ -98,6 +104,7 @@ fun HomeScreen(
                                 item = pictureItem,
                                 onItemClicked = onPictureItemClicked,
                                 height = (pictureItem.height / 12),
+                                isFavorite = favorites.contains(pictureItem.id),
                                 onFavoriteClicked = { id ->
                                     viewModel.updateFavorites(id)
                                 }
