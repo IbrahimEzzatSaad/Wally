@@ -2,18 +2,20 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
 
 }
 
 android {
-    namespace 'com.example.wally'
+    namespace 'com.ibrahimezzat404.wally'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.wally"
-        minSdk 24
-        targetSdkVersion 34
+        applicationId "com.ibrahimezzat404.wally"
+        minSdk 26
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
 
@@ -99,5 +101,11 @@ dependencies {
 
 
     implementation("com.exyte:animated-navigation-bar:1.0.0")
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:33.5.1')
+    implementation "com.google.firebase:firebase-crashlytics"
+    implementation 'com.google.firebase:firebase-analytics'
+
 
 }
