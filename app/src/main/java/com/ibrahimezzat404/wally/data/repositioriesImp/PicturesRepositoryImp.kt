@@ -1,14 +1,13 @@
-package com.ibrahimezzat404.wally.data
+package com.ibrahimezzat404.wally.data.repositioriesImp
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.ibrahimezzat404.wally.data.api.ApiParameters.PAGE_SIZE
-import com.ibrahimezzat404.wally.data.api.model.ApiPictures
-import com.ibrahimezzat404.wally.domain.repository.PicturesRepository
+import com.ibrahimezzat404.wally.data.api.ApiParameters
 import com.ibrahimezzat404.wally.data.api.PicturesApi
+import com.ibrahimezzat404.wally.data.api.model.ApiPictures
 import com.ibrahimezzat404.wally.data.api.model.PictureModel
 import com.ibrahimezzat404.wally.data.cache.Cache
 import com.ibrahimezzat404.wally.data.cache.model.CachedFavoritePicture
@@ -16,6 +15,7 @@ import com.ibrahimezzat404.wally.data.cache.model.CachedFeaturedPicture
 import com.ibrahimezzat404.wally.data.paging.CategoryPagingSource
 import com.ibrahimezzat404.wally.data.paging.PicturesRemoteMediator
 import com.ibrahimezzat404.wally.data.paging.SearchPagingSource
+import com.ibrahimezzat404.wally.data.repositories.PicturesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -30,7 +30,7 @@ class PicturesRepositoryImp @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun requestPictures(): Flow<PagingData<PictureModel>> {
         val pager = Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
+            config = PagingConfig(pageSize = ApiParameters.PAGE_SIZE, enablePlaceholders = true),
             remoteMediator = PicturesRemoteMediator(
                 cache, api
             )
@@ -77,7 +77,7 @@ class PicturesRepositoryImp @Inject constructor(
 
     override suspend fun getCategoryList(id: String): Flow<PagingData<PictureModel>> {
         return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
+            config = PagingConfig(pageSize = ApiParameters.PAGE_SIZE, enablePlaceholders = true),
             pagingSourceFactory = { CategoryPagingSource(api, id) }
         ).flow.map { pagingData ->
 
@@ -90,7 +90,7 @@ class PicturesRepositoryImp @Inject constructor(
 
     override suspend fun getSearch(query: String): Flow<PagingData<PictureModel>> {
         return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = true),
+            config = PagingConfig(pageSize = ApiParameters.PAGE_SIZE, enablePlaceholders = true),
             pagingSourceFactory = { SearchPagingSource(api, query) }
         ).flow.map { pagingData ->
 

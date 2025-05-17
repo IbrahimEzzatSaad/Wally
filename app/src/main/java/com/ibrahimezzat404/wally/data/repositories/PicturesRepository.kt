@@ -1,4 +1,4 @@
-package com.ibrahimezzat404.wally.domain.repository
+package com.ibrahimezzat404.wally.data.repositories
 
 import androidx.paging.PagingData
 import com.ibrahimezzat404.wally.data.api.model.PictureModel

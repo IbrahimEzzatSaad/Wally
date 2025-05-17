@@ -1,6 +1,6 @@
 package com.ibrahimezzat404.wally.domain.usecases
 
-import com.ibrahimezzat404.wally.domain.repository.PicturesRepository
+import com.ibrahimezzat404.wally.data.repositories.PicturesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

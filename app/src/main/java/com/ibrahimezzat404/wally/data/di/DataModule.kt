@@ -1,7 +1,7 @@
 package com.ibrahimezzat404.wally.data.di
 
-import com.ibrahimezzat404.wally.data.PicturesRepositoryImp
-import com.ibrahimezzat404.wally.domain.repository.PicturesRepository
+import com.ibrahimezzat404.wally.data.repositioriesImp.PicturesRepositoryImp
+import com.ibrahimezzat404.wally.data.repositories.PicturesRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
