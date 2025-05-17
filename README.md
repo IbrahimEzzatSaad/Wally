@@ -12,7 +12,7 @@ by [Ibrahim Ezzat](https://github.com/IbrahimEzzatSaad)*
 ## Architecture 🗼
 
 - Single Activity No Fragment
-- MVVM Pattern
+- Clean Architecture
 
 **View:** Renders UI and delegates user actions to ViewModel
 
