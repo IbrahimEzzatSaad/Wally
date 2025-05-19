@@ -10,9 +10,9 @@ class FetchFeatured @Inject constructor(private val picturesRepository: Pictures
     suspend operator fun invoke() {
         return withContext(Dispatchers.IO) {
             val pictures = picturesRepository.requestFeatured()
-            if (pictures.isEmpty())
-                throw NoMorePicturesException("No more pictures")
-            picturesRepository.storeFeatured(pictures)
+            if (pictures.isNotEmpty()){
+                picturesRepository.storeFeatured(pictures)
+            }
         }
     }
 }
